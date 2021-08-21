@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}
+Технологии
+{% endblock %}
+{% block content %}
+<div class="container py-5">
+<div class="row">
+  <h2>Hard skills</h2>
+  {% comment %}
+    Боковой блок со списком технологий 
+    Займет всю ширину блока на мобильном
+    и 25% при размерах экрана ≥768px
+  {% endcomment %}
+  <aside class="col-12 col-md-3">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        Python
+      </li>
+      <li class="list-group-item">
+        Django
+      </li>
+      <li class="list-group-item">
+        Django Rest Framework
+      </li>
+      <li class="list-group-item">
+        Selenium
+      </li>
+      <li class="list-group-item">
+        HTML
+      </li>
+      <li class="list-group-item">
+        CSS
+      </li>
+      <li class="list-group-item">
+        external APIS
+      </li>
+      <li class="list-group-item">
+        MySQL
+      </li>
+      <li class="list-group-item">
+        PostgresSQL
+      </li>
+      <li class="list-group-item">
+        TCP/IP
+      </li>
+      <li class="list-group-item">
+        Jmeter
+      </li>
+      <li class="list-group-item">
+        Selenium grid
+      </li>
+      <li class="list-group-item">
+        Java script
+      </li>
+      <li class="list-group-item">
+      </li>
+    </ul>
+  </aside>
+  <article class="col-12 col-md-9">
+    <h3>Стек выполняемых задач в рамках работы</h3><br>
+    <p>I was engaged in stress testing, writing au- totests.<br>Writing test plans, check sheets. Was involved in the development.</p
+  </article>
+</div>
+</div>
+{% endblock %}
