@@ -3,6 +3,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from django import forms
 
+from posts import factories
 from posts.models import Post, Group
 
 User = get_user_model()
@@ -190,10 +191,10 @@ class PaginatorViewsTest(TestCase):
         cls.group = Group.objects.create(title='google',
                                          slug='google',
                                          description='its google dude')
-        for i in range(13):
-            Post.objects.create(text='its_test_post',
-                                author=cls.user,
-                                group=cls.group)
+        factories.PostFactory.create_batch(13,
+                                           author=cls.user,
+                                           group=cls.group
+                                           )
 
     def setUp(self) -> None:
         self.authorized_client = Client()
