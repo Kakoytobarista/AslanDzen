@@ -150,9 +150,11 @@ class PostsViewsTests(TestCase):
             self.assertEqual(post.group.title, 'google')
 
     def test_profile_page_show_correct_context(self):
-        """Шаблон posts:profile сформирован с правильным контекстом."""
-        response = self.authorized_client.get(reverse('posts:profile',
-                                                      args=[self.user]))
+        """Шаблон posts:profile сформирован с
+        правильным контекстом."""
+        response = self.authorized_client.get(reverse(
+            'posts:profile',
+            args=[self.user]))
         title = response.context['title']
         count_posts = response.context['count_posts']
         author = response.context['author']
@@ -164,14 +166,16 @@ class PostsViewsTests(TestCase):
 
         for post in post_object:
             self.assertEqual(post.text, 'its_test_post')
-            self.assertEqual(post.author.get_username(), 'tester')
+            self.assertEqual(post.author.get_username(),
+                             'tester')
             self.assertEqual(post.group.title, 'google')
 
     def test_post_detail_page_show_correct_context(self):
         """Проверка на то что Шаблон post_detail сформирован
          с правильным контекстом."""
-        response = self.authorized_client.get(reverse('posts:post_detail',
-                                                      args=[self.post.id]))
+        response = self.authorized_client.get(reverse(
+            'posts:post_detail',
+            args=[self.post.id]))
         post_context = response.context['post']
         title_context = response.context['title']
         count_posts_context = response.context['count_posts']

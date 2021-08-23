@@ -11,4 +11,3 @@ class PostFactory(factory.django.DjangoModelFactory):
         model = models.Post
 
     text = factory.Sequence(lambda n: f"{fake.text()}")
-
