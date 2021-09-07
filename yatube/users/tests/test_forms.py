@@ -25,8 +25,8 @@ class FormUsersTest(TestCase):
         response = self.guest_user.post(reverse('users:signup'),
                                         data=form_data,
                                         follow=True)
-        self.assertRedirects(response, reverse('posts:index'))
+        self.assertRedirects(response, reverse('users:login'))
         self.assertTrue(response)
         self.assertEqual(User.objects.get(
-            username=form_data['username']).get_username(),
+                         username=form_data['username']).get_username(),
                          form_data['username'])

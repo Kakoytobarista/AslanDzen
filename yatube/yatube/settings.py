@@ -24,10 +24,17 @@ SECRET_KEY = 's602!acnd(oi7$*!h8=_#796#yca5vt+_-dgr(i26u%docfwm3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+if DEBUG is False:
+    ALLOWED_HOSTS = [
+        'localhost',
+        '127.0.0.1',
+        '[::1]',
+        'testserver',
+    ]
 
-ALLOWED_HOSTS = []
-
-
+if DEBUG is True:
+    ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
@@ -40,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'sorl.thumbnail',
 ]
 
 MIDDLEWARE = [
@@ -53,7 +61,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'yatube.urls'
-
+CSRF_FAILURE_VIEW = 'core.views.csrf_failure'
 
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 TEMPLATES = [
@@ -86,6 +94,11 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -131,8 +144,11 @@ LOGIN_REDIRECT_URL = 'posts:index'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 
-
 PAGINATOR_OBJECTS_PER_PAGE = 10
+PAGINATOR_COMMENT_PER_PAGE = 3

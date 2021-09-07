@@ -51,7 +51,7 @@ class PostModelTest(TestCase):
         verbose_fields = {
             'author': 'Автор поста',
             'text': 'Текст поста',
-            'pub_date': 'Дата публикации поста',
+            'pub_date': 'Дата создания',
             'group': 'Группа',
         }
         for field, expected_value in verbose_fields.items():

@@ -10,16 +10,10 @@
         <span class="navbar-toggler-icon"></span>
         </button>
       <div class="collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
-
-
-      {% comment %}
-      Меню - список пунктов со стандартными классами Bootsrap.
-      Класс nav-pills нужен для выделения активных пунктов 
-      {% endcomment %}
       <ul class="nav nav-pills">
       {% with request.resolver_match.view_name as view_name %}
         <li class="nav-item"> 
-          <a class="nav-link {% if view_name  == 'about:author' %}active{% endif %}" 
+          <a class="nav-link {% if view_name  == 'about:author' %}active{% endif %}"
               href="{% url 'about:author' %}">Об авторе</a>
         </li>
         <li class="nav-item">
@@ -51,6 +45,6 @@
         {% endif %}
         {% endwith %} 
       </ul>
+      </div>
     </div>
-  </nav>      
-</header> 
+  </nav>

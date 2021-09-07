@@ -1,21 +1,15 @@
 {% extends "base.html" %}
+{% load cache %}
 {% block content %}
+
 <div class="col-md-8 p-5">
   <div class="container">
     <h1 style>Последние обновления на сайте</h1>
+    {% include 'posts/includes/switcher.html' %}
+    {% cache 20 index_page %}
     {% for post in page_obj %}
-    <article>
-      <ul>
-        <li>
-        Автор: {{ post.author }}
-        </li>
-        <li>
-        Дата публикации: {{ post.pub_date|date:"d E Y" }}
-        </li>
-      </ul>
-      <p>{{ post.text }}</p>
-    </article>
-    {% if post.group %}   
+    {% include 'posts/includes/post_list.html' %}
+    {% if post.group %}
     <a href="{% url 'posts:group_list' post.group.slug %}">Все записи группы</a>
     <br>
     {% endif %}
@@ -26,9 +20,9 @@
     {% endif %}
     <hr>
     {% endfor %}
+    {% endcache %}
   </div>
 </div>
 
 {% include 'posts/includes/paginator.html' %}
 {% endblock %}
- 

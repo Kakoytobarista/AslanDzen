@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
-from django.urls import reverse
 
 User = get_user_model()
 
@@ -20,14 +19,14 @@ class UsersUrlsTests(TestCase):
         """Проверка на возможность открытия страниц
         доступных неавторизованному пользователю"""
         templates_url_names = {
-            'users/login.html': reverse('users:login'),
-            'users/signup.html': reverse('users:signup'),
+            'users/login.html': '/auth/login/',
+            'users/signup.html': '/auth/signup/',
             'users/password_reset_form.html':
-                reverse('users:password_reset_form'),
+                '/auth/password_reset_form/',
             'users/password_reset_done.html':
-                reverse('users:password_reset_done'),
+                '/auth/password_reset/done/',
             'users/password_reset_complete.html':
-                reverse('users:password_reset_complete')
+                '/auth/password_reset/complete/'
         }
         for template, adress in templates_url_names.items():
             with self.subTest(adress=adress):
@@ -39,10 +38,10 @@ class UsersUrlsTests(TestCase):
         для авторизованного пользователя"""
         templates_url_names = {
             'users/password_change_form.html':
-                reverse('users:password_change_form'),
+                '/auth/password_change_form/',
             'users/password_change_done.html':
-                reverse('users:password_change_done'),
-            'users/logged_out.html': reverse('users:logout')
+                '/auth/password_change/done/',
+            'users/logged_out.html': '/auth/logout/'
         }
         for template, adress in templates_url_names.items():
             with self.subTest(adress=adress):
@@ -52,5 +51,5 @@ class UsersUrlsTests(TestCase):
     def test_page_password_change_doesnt_work_with_guest(self):
         """Проверка на возможность корректной смены
         пароля"""
-        response = self.guest_user.get(reverse('users:password_change_form'))
+        response = self.guest_user.get('/auth/password_change_form/')
         self.assertTemplateNotUsed(response, 'users/password_change_form.html')

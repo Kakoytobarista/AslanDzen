@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load cache %}
+{% block content %}
+<div class="col-md-8 p-5">
+  <div class="container">
+    <h1 style>Посты подписок пользователей</h1>
+    {% include 'posts/includes/switcher.html' %}
+
+    {% for post in page_obj %}
+    {% include 'posts/includes/post_list.html' %}
+    {% if post.group %}
+    <a href="{% url 'posts:group_list' post.group.slug %}">Все записи группы</a>
+    <br>
+    {% endif %}
+    {% if post.author == request.user %}
+    <a href="{% url 'posts:update_post' post.id %}">Подробная информация</a>
+    {% else %}
+    <a href="{% url 'posts:post_detail' post.id %}">Подробная информация</a>
+    {% endif %}
+        <hr>
+    {% endfor %}
+
+  </div>
+</div>
+
+{% include 'posts/includes/paginator.html' %}
+{% endblock %}

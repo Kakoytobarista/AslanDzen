@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
-from django.test import TestCase, Client
 from django.urls import reverse
+from django.test import TestCase, Client
 from http import HTTPStatus
 
 from posts.models import Post, Group
@@ -41,18 +41,17 @@ class PostsUrlTests(TestCase):
         """Проверка на корректный рендеринг страниц только
         авторизованных пользователей."""
 
-        response = self.authorized_client.get(reverse('posts:post_create'))
+        response = self.authorized_client.get('/create/')
         self.assertTemplateUsed(response, 'posts/create_post.html')
 
     def test_author_can_see_edit_post_page(self):
         """Проверка на корректный рендеринг страницы редактирования
         поста только у авторизованного пользователя + Автора этого поста."""
 
-        response = self.authorized_client.get(reverse('posts:update_post',
-                                                      args=[self.post.id]))
+        response = self.authorized_client.get(f'/posts/{self.post.id}/edit/')
         self.assertTemplateUsed(response, 'posts/create_post.html')
 
-    def test_is_page_404(self):
-        """Проверка на возврат 404 ошибки"""
-        response = self.authorized_client.get('posts/tests/')
-        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
+    def test_is_page_302(self):
+        """Проверка на возврат 302 статус кода"""
+        response = self.guest_user.get(reverse('posts:post_create'))
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
