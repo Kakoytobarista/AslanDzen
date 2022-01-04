@@ -21,3 +21,8 @@ body {
   width: 100%;
   height: 60px;
 }
+
+
+.navbar-brand {
+    padding-left: 30px;
+}

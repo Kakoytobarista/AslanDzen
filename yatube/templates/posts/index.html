@@ -1,12 +1,10 @@
 {% extends "base.html" %}
-{% load cache %}
 {% block content %}
 
-<div class="col-md-8 p-5">
+<div class="col-md-7 p-5">
   <div class="container">
-    <h1 style>Последние обновления на сайте</h1>
+    <h1 class="last_update_text" style>Последние обновления на сайте</h1>
     {% include 'posts/includes/switcher.html' %}
-    {% cache 20 index_page %}
     {% for post in page_obj %}
     {% include 'posts/includes/post_list.html' %}
     {% if post.group %}
@@ -14,13 +12,21 @@
     <br>
     {% endif %}
     {% if post.author == request.user %}
-    <a href="{% url 'posts:update_post' post.id %}">Подробная информация</a>
+        <li class="post_opportunities">
+    <a href="{% url 'posts:update_post' post.id %}">Изменить пост</a> |
+    <a href="{% url 'posts:post_detail' post.id %}">Подробная информация</a> |
+    <a href="{% url 'posts:post_delete' post.id %}">Удалить пост</a>
+        </li>
+        <style>
+  .post_opportunities {
+    list-style-type: none; /* Убираем маркеры */
+   }
+        </style>
     {% else %}
     <a href="{% url 'posts:post_detail' post.id %}">Подробная информация</a>
     {% endif %}
     <hr>
     {% endfor %}
-    {% endcache %}
   </div>
 </div>
 

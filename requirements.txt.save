@@ -1,3 +1,9 @@
+asgiref==3.3.1
+pytz==2021.1
+sqlparse==0.4.1
+django-crispy-forms==1.11.2
+django-channels
+channels_redis
 attrs==19.3.0
 autopep8==1.5.7
 beautifulsoup4==4.9.3

@@ -5,20 +5,17 @@
   <div class="container">
     <h1 style>Посты подписок пользователей</h1>
     {% include 'posts/includes/switcher.html' %}
-
+    {% cache 20 index_page %}
     {% for post in page_obj %}
     {% include 'posts/includes/post_list.html' %}
     {% if post.group %}
     <a href="{% url 'posts:group_list' post.group.slug %}">Все записи группы</a>
     <br>
     {% endif %}
-    {% if post.author == request.user %}
-    <a href="{% url 'posts:update_post' post.id %}">Подробная информация</a>
-    {% else %}
     <a href="{% url 'posts:post_detail' post.id %}">Подробная информация</a>
-    {% endif %}
         <hr>
     {% endfor %}
+  {%  endcache %}
 
   </div>
 </div>

@@ -41,17 +41,19 @@
     <div class="card-body">
       <form method="post" action="{% url 'posts:add_comment' post.id  %}">
         {% csrf_token %}
+          <div class="form-floating">
         <div class="form-group mb-2">
           {{ form.text|addclass:"form-control" }}
+</div>
         </div>
-        <button type="submit" class="btn btn-primary">Отправить</button>
+        <button type="submit" class="btn btn-primary" id="send-comment">Отправить</button>
       </form>
     </div>
   </div>
 {% endif %}
 
-{% for comment in page_obj %}
-  <div class="media mb-4">
+  <div class="media mb-4" id="comments-list">
+  {% for comment in page_obj %}
     <div class="popover-header">
     <hr>
       <h5 class="mt-0">
@@ -59,12 +61,82 @@
           {{ comment.author.username }}
         </a>
       </h5>
-        <p>
-         {{ comment.text }} <br>
+        <p>{{ comment.text }}<br>
          {{ comment.created }}
         </p>
       </div>
     </div>
 {% endfor %}
+
 {% include 'posts/includes/paginator.html' %}
 {% endblock %}
+
+{% block js %}
+<script>
+    const commentsSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/posts/'
+        + "{{ post.id }}"
+        + '/'
+    );
+    commentsSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        console.log(data)
+        commentsList = document.getElementById('comments-list')
+        commentsList.insertAdjacentHTML(
+            'beforeend',
+            '<div class="col-md-12 mt-3 mb-3">\n' +
+            '<p><strong>' + data['message']['author'] + '</strong> | <small>опубликовано:' + data['message']['created_at'] + '</small></p>\n' +
+            '<p>' + data['message']['text'] + '</p>\n' +
+            '</div>'
+        )
+    };
+    document.querySelector('#send-comment').onclick = function(e) {
+        e.preventDefault()
+        const messageInputDom = document.querySelector('#id_text');
+        const text = messageInputDom.value;
+        commentsSocket.send(JSON.stringify({
+            'text': text
+        }));
+        messageInputDom.value = '';
+    };
+</script>
+{% endblock js %}
+
+
+{##}
+{#{% block js %}#}
+{#<script>#}
+{#    const commentsSocket = new WebSocket(#}
+{#        'ws://'#}
+{#        + window.location.host#}
+{#        + '/posts/'#}
+{#        + "{{ post.id }}"#}
+{#        + '/'#}
+{#    );#}
+{#    commentsSocket.onmessage = function(e) {#}
+{#        const data = JSON.parse(e.data);#}
+{#        commentsList = document.getElementById('comments-list')#}
+{#        commentsList.insertAdjacentHTML(#}
+{#            'beforeend',#}
+{#            '<div class="popover-header">\n' +#}
+{#            '<hr>\n' +#}
+{#            '<h5 class="mt-0">\n' +#}
+{#            'data["message"]["author"]</a></h5>\n' +#}
+{#            '<p>data["message"]["created"]<br>data["message"]["text"]</p>\n' +#}
+{#            '</div>'#}
+{#        )#}
+{#    };#}
+{#    document.querySelector('#send-comment').onclick = function(e) {#}
+{#        e.preventDefault()#}
+{#        const messageInputDom = document.querySelector('#id_text');#}
+{#        const text = messageInputDom.value;#}
+{#        commentsSocket.send(JSON.stringify({#}
+{#            'text': text#}
+{#        }));#}
+{#        messageInputDom.value = '';#}
+{#    };#}
+{#</script>#}
+{##}
+{#{% endblock js %}#}

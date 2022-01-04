@@ -1,3 +1,4 @@
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
@@ -126,6 +127,15 @@ def post_edit(request, post_id):
 
 
 @login_required
+def post_delete(request, post_id):
+    users_post = get_object_or_404(Post, id=post_id)
+    if request.user == users_post.author:
+        post_to_delete = Post.objects.get(id=post_id)
+        post_to_delete.delete()
+    return HttpResponseRedirect(reverse("posts:index"))
+
+
+@login_required
 def add_comment(request, post_id):
     form = CommentForm(request.POST or None)
     post = get_object_or_404(Post,
@@ -135,8 +145,10 @@ def add_comment(request, post_id):
         comment.author = request.user
         comment.post = post
         comment.save()
-    return redirect(reverse('posts:post_detail',
-                            args=[post_id]))
+        return HttpResponseRedirect(reverse('posts:post_detail',
+                                            args=[post_id]))
+    return HttpResponseRedirect(reverse('posts:post_detail',
+                                        args=[post_id]))
 
 
 @login_required
