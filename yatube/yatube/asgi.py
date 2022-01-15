@@ -7,6 +7,7 @@ from django.core.asgi import get_asgi_application
 
 from posts.routing import websocket_urlpatterns
 
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'yatube.settings')
 
 application = ProtocolTypeRouter({

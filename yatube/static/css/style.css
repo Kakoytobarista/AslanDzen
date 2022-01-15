@@ -23,6 +23,18 @@ body {
 }
 
 
-.navbar-brand {
-    padding-left: 30px;
+#follow_btn {
+    margin-top: 20px;
+}
+
+#posts_list {
+    margin-bottom: -10px;
+}
+
+#btn_main_page {
+    margin: 5px;
+}
+
+#up_block_post {
+    margin-right: 20px;
 }

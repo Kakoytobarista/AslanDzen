@@ -1,11 +1,24 @@
 import json
+from random import randint
+from time import sleep
 
 from channels.db import database_sync_to_async
-from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer
+
+
 from django.shortcuts import get_object_or_404
 
 from posts.models import Comment
 from posts.models import Post
+
+
+# class WSConsumers(WebsocketConsumer):
+#     def connect(self):
+#         self.accept()
+#
+#         for i in range(1000):
+#             self.send(json.dumps({"message": randint(1, 100)}))
+#             sleep(3)
 
 
 class CommentsConsumer(AsyncWebsocketConsumer):

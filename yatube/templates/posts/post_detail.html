@@ -11,20 +11,16 @@
                 </li>
                 {% if post.group %}
                 <li class="list-group-item">
-                Группа: {{ post.group }}
-                <a href="{% url 'posts:group_list' post.group.slug %}"><br>
-                    Все записи группы
-                </a>
+                Группа: <a type="button" id="btn_main_page" class="btn btn-outline-primary" href="{% url 'posts:group_list' post.group.slug %}">{{ post.group }}</a>
                 {% endif %}
                 </li>
                 <li class="list-group-item">
-                Автор: {{ post.author.get_full_name }}
+                    Автор: <a class="btn btn-outline-primary" href="{% url 'posts:profile' post.author %}">{{ post.author.get_full_name }}</a>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                 Всего постов автора:  {{ count_posts }}
                 </li>
                 <li class="list-group-item">
-                <a href="{% url 'posts:profile' post.author %}"> Все посты пользователя
                 </a>
                 </li>
             </ul>
@@ -62,27 +58,34 @@
         </a>
       </h5>
         <p>{{ comment.text }}<br>
+            <h1 id="id_text">{{ text }}</h1>
          {{ comment.created }}
         </p>
       </div>
     </div>
+{#      <script>#}
+{#    var socket = new WebSocket('ws://127.0.0.1:8000/ws/posts/133/');#}
+{#    socket.onmessage = function(event){#}
+{#        var data = JSON.parse(event.data);#}
+{#        console.log(data);#}
+{#        document.querySelector('#app').innerText = data.message#}
+{#    }#}
+{##}
+{#      </script>#}
 {% endfor %}
 
 {% include 'posts/includes/paginator.html' %}
 {% endblock %}
 
-{% block js %}
+
 <script>
-    const commentsSocket = new WebSocket(
-        'ws://'
-        + window.location.host
-        + '/posts/'
-        + "{{ post.id }}"
-        + '/'
+    var commentsSocket = new WebSocket(
+        'ws://127.0.0.1:8000/ws/posts/129/'
     );
     commentsSocket.onmessage = function(e) {
-        const data = JSON.parse(e.data);
+        var data = JSON.parse(e.data);
         console.log(data)
+        document.querySelector('#id_text').innerText = data.message
         commentsList = document.getElementById('comments-list')
         commentsList.insertAdjacentHTML(
             'beforeend',
@@ -96,47 +99,10 @@
         e.preventDefault()
         const messageInputDom = document.querySelector('#id_text');
         const text = messageInputDom.value;
+        document.querySelector('#id_text').innerText = data.message
         commentsSocket.send(JSON.stringify({
             'text': text
         }));
         messageInputDom.value = '';
     };
 </script>
-{% endblock js %}
-
-
-{##}
-{#{% block js %}#}
-{#<script>#}
-{#    const commentsSocket = new WebSocket(#}
-{#        'ws://'#}
-{#        + window.location.host#}
-{#        + '/posts/'#}
-{#        + "{{ post.id }}"#}
-{#        + '/'#}
-{#    );#}
-{#    commentsSocket.onmessage = function(e) {#}
-{#        const data = JSON.parse(e.data);#}
-{#        commentsList = document.getElementById('comments-list')#}
-{#        commentsList.insertAdjacentHTML(#}
-{#            'beforeend',#}
-{#            '<div class="popover-header">\n' +#}
-{#            '<hr>\n' +#}
-{#            '<h5 class="mt-0">\n' +#}
-{#            'data["message"]["author"]</a></h5>\n' +#}
-{#            '<p>data["message"]["created"]<br>data["message"]["text"]</p>\n' +#}
-{#            '</div>'#}
-{#        )#}
-{#    };#}
-{#    document.querySelector('#send-comment').onclick = function(e) {#}
-{#        e.preventDefault()#}
-{#        const messageInputDom = document.querySelector('#id_text');#}
-{#        const text = messageInputDom.value;#}
-{#        commentsSocket.send(JSON.stringify({#}
-{#            'text': text#}
-{#        }));#}
-{#        messageInputDom.value = '';#}
-{#    };#}
-{#</script>#}
-{##}
-{#{% endblock js %}#}

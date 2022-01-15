@@ -6,12 +6,12 @@
   <h3>Всего постов: {{ count_posts }}</h3>
     {% if request.user != author %}
         {% if following %}
-        <a class="btn btn-lg btn-light"
+        <a id="follow_btn" class="btn btn-lg btn-light"
           href="{% url 'posts:profile_unfollow' author.username %}" role="button">
           Отписаться
         </a>
         {% elif not following %}
-          <a class="btn btn-lg btn-primary"
+          <a id="follow_btn" class="btn btn-lg btn-primary"
             href="{% url 'posts:profile_follow' author.username %}" role="button">
             Подписаться
           </a>
@@ -20,24 +20,21 @@
    {% endif %}
   {% endif %}
   </div>
-  <article>
-    <ul>
-      <li>
-        Автор: {{ author }}
-      </li>
-      <li>
-        Дата публикации: {{ page_obj.pub_date|date:"d E Y" }}
-      </li>
-    </ul>
-  </article>
   <hr>
+    <ul class="list-group list-group-flush">
   {% for post in page_obj %}
   {% if post.group %}
-  <a href="{% url 'posts:group_list' post.group.slug %}"></a>      
+      <li id="posts_list" class="list-group-item border-0 ">
+  Группа: <a class="btn btn-light" href="{% url 'posts:group_list' post.group.slug %}">{{ post.group.slug|upper }}</a>
   {% endif %}
+            </li>
+      <li class="list-group-item">
+          Дата публикации: {{ post.pub_date|date:"d E Y" }}
+      </li>
   {% include 'posts/includes/post_with_photo.html' %}
   <hr>
   {% endfor %}
-
+</ul>
 {% include 'posts/includes/paginator.html' %}
 {% endblock %}
+</div>
