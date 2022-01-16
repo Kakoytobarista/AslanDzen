@@ -42,7 +42,11 @@
           {{ form.text|addclass:"form-control" }}
 </div>
         </div>
-        <button type="submit" class="btn btn-primary" id="send-comment">Отправить</button>
+{#        <textarea id="chat-log" cols="100" rows="20"></textarea><br>#}
+{#        <input id="chat-message-input" type="text" size="100"><br>#}
+{#        <input id="chat-message-submit" type="button" value="Send">#}
+              {{ post_id|json_script:"post_id" }}
+        <button type="submit" class="btn btn-primary">Отправить</button>
       </form>
     </div>
   </div>
@@ -57,52 +61,77 @@
           {{ comment.author.username }}
         </a>
       </h5>
-        <p>{{ comment.text }}<br>
-            <h1 id="id_text">{{ text }}</h1>
+        <p id="chat-log"><br>
          {{ comment.created }}
         </p>
       </div>
     </div>
-{#      <script>#}
-{#    var socket = new WebSocket('ws://127.0.0.1:8000/ws/posts/133/');#}
-{#    socket.onmessage = function(event){#}
-{#        var data = JSON.parse(event.data);#}
-{#        console.log(data);#}
-{#        document.querySelector('#app').innerText = data.message#}
-{#    }#}
-{##}
-{#      </script>#}
-{% endfor %}
+    {% endfor %}
+          <script>
+        const post_id = JSON.parse(document.getElementById('post_id').textContent);
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/posts/'
+            + post_id
+            + '/'
+        );
+
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            document.querySelector('#chat-log').value += (data.message + '\n');
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly', e);
+        };
+
+        document.querySelector('#chat-message-input').focus();
+        document.querySelector('#chat-message-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+
+        document.querySelector('.btn btn-primary').onclick = function(e) {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'message': message
+            }));
+            messageInputDom.value = '';
+        };
+    </script>
 
 {% include 'posts/includes/paginator.html' %}
 {% endblock %}
 
 
-<script>
-    var commentsSocket = new WebSocket(
-        'ws://127.0.0.1:8000/ws/posts/129/'
-    );
-    commentsSocket.onmessage = function(e) {
-        var data = JSON.parse(e.data);
-        console.log(data)
-        document.querySelector('#id_text').innerText = data.message
-        commentsList = document.getElementById('comments-list')
-        commentsList.insertAdjacentHTML(
-            'beforeend',
-            '<div class="col-md-12 mt-3 mb-3">\n' +
-            '<p><strong>' + data['message']['author'] + '</strong> | <small>опубликовано:' + data['message']['created_at'] + '</small></p>\n' +
-            '<p>' + data['message']['text'] + '</p>\n' +
-            '</div>'
-        )
-    };
-    document.querySelector('#send-comment').onclick = function(e) {
-        e.preventDefault()
-        const messageInputDom = document.querySelector('#id_text');
-        const text = messageInputDom.value;
-        document.querySelector('#id_text').innerText = data.message
-        commentsSocket.send(JSON.stringify({
-            'text': text
-        }));
-        messageInputDom.value = '';
-    };
-</script>
+{#<script>#}
+{#    var commentsSocket = new WebSocket(#}
+{#        'ws://127.0.0.1:8000/ws/posts/133/'#}
+{#    );#}
+{#    commentsSocket.onmessage = function(e) {#}
+{#        var data = JSON.parse(e.data);#}
+{#        console.log(data)#}
+{#        document.querySelector('#id_text').innerText = data.message#}
+{#        commentsList = document.getElementById('comments-list')#}
+{#        commentsList.insertAdjacentHTML(#}
+{#            'beforeend',#}
+{#            '<div class="col-md-12 mt-3 mb-3">\n' +#}
+{#            '<p><strong>' + data['message']['author'] + '</strong> | <small>опубликовано:' + data['message']['created_at'] + '</small></p>\n' +#}
+{#            '<p>' + data['message']['text'] + '</p>\n' +#}
+{#            '</div>'#}
+{#        )#}
+{#    };#}
+{#    document.querySelector('#send-comment').onclick = function(e) {#}
+{#        e.preventDefault()#}
+{#        const messageInputDom = document.querySelector('#id_text');#}
+{#        const text = messageInputDom.value;#}
+{#        document.querySelector('#id_text').innerText = data.message#}
+{#        commentsSocket.send(JSON.stringify({#}
+{#            'text': text#}
+{#        }));#}
+{#        messageInputDom.value = '';#}
+{#    };#}
+{#</script>#}

@@ -75,6 +75,7 @@ def post_detail(request, post_id):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     context = {
+        "post_id": post_id,
         'form': form,
         'title': post.text[:30],
         'post': post,
@@ -145,10 +146,8 @@ def add_comment(request, post_id):
         comment.author = request.user
         comment.post = post
         comment.save()
-        return HttpResponseRedirect(reverse('posts:post_detail',
-                                            args=[post_id]))
-    return HttpResponseRedirect(reverse('posts:post_detail',
-                                        args=[post_id]))
+
+    return redirect(reverse("posts:post_detail", args=[post_id]))
 
 
 @login_required
