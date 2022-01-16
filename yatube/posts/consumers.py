@@ -1,9 +1,11 @@
+import datetime
 import json
 from random import randint
 from time import sleep
 
 import json
 
+from asgiref.sync import sync_to_async
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
@@ -14,10 +16,10 @@ from posts.models import Post, Comment
 
 
 class WSConsumers(AsyncWebsocketConsumer):
+    author = None
 
     async def connect(self):
         self.post_id = self.scope['url_route']['kwargs']['post_id']
-        print(self.post_id)
         self.post_group_name = 'posts_%s' % self.post_id
 
         # Join room group
@@ -45,7 +47,8 @@ class WSConsumers(AsyncWebsocketConsumer):
             self.post_group_name,
             {
                 'type': 'chat_message',
-                'message': message
+                'message': message,
+                'author1': "hello"
             }
         )
 
@@ -54,21 +57,27 @@ class WSConsumers(AsyncWebsocketConsumer):
         message = event['message']
 
         # Send message to WebSocket
+        await self.create_new_comment(message)
+        print("HEY")
         await self.send(text_data=json.dumps({
-            'message': message
+            'message': message,
+            'author': str(self.author),
+            'created': str(datetime.datetime.now().strftime("%a, %d %B, %Y, %H:%M"))
         }))
 
     @database_sync_to_async
-    async def create_new_comment(self, text):
-        post = get_object_or_404(Post, self.post_id)
-        print(post)
-        message = Comment.objects.create(
+    def create_new_comment(self, text):
+        post_id = self.scope['url_route']['kwargs']['post_id']
+        post = get_object_or_404(Post, id=post_id)
+        self.post_id = post_id
+        self.author = post.author
+        comment = Comment.objects.create(
             text=text,
-            post=post
+            post=post,
+            author=post.author
         )
-        await self.send(text_data=json.dumps({
-            'message': message
-        }))
+        print("SAVEEE")
+
 
 
 # class CommentsConsumer(AsyncWebsocketConsumer):

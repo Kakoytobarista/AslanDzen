@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
@@ -71,17 +73,14 @@ def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     comments = post.comments.all()
     count_posts = post.author.posts.count()
-    paginator = Paginator(comments, per_page_comment)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
     context = {
         "post_id": post_id,
         'form': form,
         'title': post.text[:30],
         'post': post,
         'count_posts': count_posts,
-        'page_obj': page_obj,
-        'paginator': paginator
+        'page_obj': comments,
+        "created": datetime.now().strftime("%a, %d %B, %Y, %H:%M")
     }
     return render(request,
                   'posts/post_detail.html',

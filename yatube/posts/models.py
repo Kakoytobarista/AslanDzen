@@ -63,9 +63,6 @@ class Comment(models.Model):
     def __str__(self):
         return self.text
 
-    def last_10_comments(self):
-        return Comment.objects.order_by("-created").all()[:30]
-
 
 class Follow(models.Model):
     user = models.ForeignKey(User, verbose_name='Follower',

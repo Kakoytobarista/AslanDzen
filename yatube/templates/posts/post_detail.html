@@ -42,11 +42,8 @@
           {{ form.text|addclass:"form-control" }}
 </div>
         </div>
-{#        <textarea id="chat-log" cols="100" rows="20"></textarea><br>#}
-{#        <input id="chat-message-input" type="text" size="100"><br>#}
-{#        <input id="chat-message-submit" type="button" value="Send">#}
+        <input id="chat-message-submit" class="btn btn-primary" type="button" value="Send">
               {{ post_id|json_script:"post_id" }}
-        <button type="submit" class="btn btn-primary">Отправить</button>
       </form>
     </div>
   </div>
@@ -57,12 +54,10 @@
     <div class="popover-header">
     <hr>
       <h5 class="mt-0">
-        <a href="{% url 'posts:profile' comment.author %}">
           {{ comment.author.username }}
-        </a>
       </h5>
-        <p id="chat-log"><br>
-         {{ comment.created }}
+        <p id="chat-log">{{ comment.text }}<br>
+         {{ created }}
         </p>
       </div>
     </div>
@@ -79,6 +74,21 @@
 
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
+            console.log(data.message)
+            console.log(data.author)
+
+            const newDiv = document.createElement("div");
+            newDiv.classList.add("popover-header");
+            newDiv.innerHTML += "<hr>";
+
+            var author = "<h5 class='mt-0'>" + data.author + "</h5>";
+            newDiv.innerHTML += author;
+
+            var new_comment = "<p id='chat-log'>" + data.message + "</p>" +
+                 data.created;
+            newDiv.innerHTML += new_comment;
+            my_div = document.getElementById("org_div1");
+            document.body.insertBefore(newDiv, my_div);
             document.querySelector('#chat-log').value += (data.message + '\n');
         };
 
@@ -93,7 +103,7 @@
             }
         };
 
-        document.querySelector('.btn btn-primary').onclick = function(e) {
+        document.querySelector('#chat-message-submit').onclick = function(e) {
             const messageInputDom = document.querySelector('#chat-message-input');
             const message = messageInputDom.value;
             chatSocket.send(JSON.stringify({
@@ -105,33 +115,3 @@
 
 {% include 'posts/includes/paginator.html' %}
 {% endblock %}
-
-
-{#<script>#}
-{#    var commentsSocket = new WebSocket(#}
-{#        'ws://127.0.0.1:8000/ws/posts/133/'#}
-{#    );#}
-{#    commentsSocket.onmessage = function(e) {#}
-{#        var data = JSON.parse(e.data);#}
-{#        console.log(data)#}
-{#        document.querySelector('#id_text').innerText = data.message#}
-{#        commentsList = document.getElementById('comments-list')#}
-{#        commentsList.insertAdjacentHTML(#}
-{#            'beforeend',#}
-{#            '<div class="col-md-12 mt-3 mb-3">\n' +#}
-{#            '<p><strong>' + data['message']['author'] + '</strong> | <small>опубликовано:' + data['message']['created_at'] + '</small></p>\n' +#}
-{#            '<p>' + data['message']['text'] + '</p>\n' +#}
-{#            '</div>'#}
-{#        )#}
-{#    };#}
-{#    document.querySelector('#send-comment').onclick = function(e) {#}
-{#        e.preventDefault()#}
-{#        const messageInputDom = document.querySelector('#id_text');#}
-{#        const text = messageInputDom.value;#}
-{#        document.querySelector('#id_text').innerText = data.message#}
-{#        commentsSocket.send(JSON.stringify({#}
-{#            'text': text#}
-{#        }));#}
-{#        messageInputDom.value = '';#}
-{#    };#}
-{#</script>#}
