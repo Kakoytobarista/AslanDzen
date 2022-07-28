@@ -1,6 +1,21 @@
 # AslanDzen
 A web application for viewing, editing and displaying your articles with limited capabilities for authorized and unauthorized users.
 
+### Технологии:
+Python
+Django
+Django Rest Framework
+Selenium
+HTML
+CSS
+external APIS
+MySQL
+PostgresSQL
+TCP/IP
+Jmeter
+Selenium grid
+Java script
+
 ### How to run project:
 1. Install python3
 ```
