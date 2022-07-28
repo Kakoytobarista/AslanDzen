@@ -1,6 +1,9 @@
 # AslanDzen
 A web application for viewing, editing and displaying your articles with limited capabilities for authorized and unauthorized users.
 
+### Технологии:
+Python==3.8, Django==3.1.7, HTML/CSS/JS, external APIS, sqlite.
+
 ### How to run project:
 1. Install python3
 ```
