@@ -4,17 +4,11 @@ A web application for viewing, editing and displaying your articles with limited
 ### Технологии:
 Python
 Django
-Django Rest Framework
-Selenium
 HTML
 CSS
 external APIS
-MySQL
-PostgresSQL
-TCP/IP
-Jmeter
-Selenium grid
 Java script
+sqlite
 
 ### How to run project:
 1. Install python3
