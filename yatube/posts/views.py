@@ -10,7 +10,6 @@ from django.contrib.auth.decorators import login_required
 from .models import Group, Post, User, Follow
 from .forms import PostForm, CommentForm
 from yatube.settings import PAGINATOR_OBJECTS_PER_PAGE as per_page
-from yatube.settings import PAGINATOR_COMMENT_PER_PAGE as per_page_comment
 
 
 def get_page_object(request, posts):
