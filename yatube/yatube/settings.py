@@ -17,7 +17,6 @@ import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
 
-load_dotenv()
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -30,7 +29,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 's602!acnd(oi7$*!h8=_#796#yca5vt+_-dgr(i26u%docfwm3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sentry_sdk.init(
     dsn="https://0e2c2c60ea8741e29307fd3b1b048d8e@o1110399.ingest.sentry.io/6139229", 
     integrations=[DjangoIntegration()],
@@ -44,15 +43,15 @@ if DEBUG is False:
         '127.0.0.1',
         '[::1]',
         'testserver',
-        '62.84.124.111',
-	'postochnaya.myvnc.com',
+        '51.250.87.87',
+	'postochnaya.onthewifi.com',
     ]
 
 if DEBUG is True:
-    ALLOWED_HOSTS = ['62.84.124.111',
+    ALLOWED_HOSTS = ['51.250.13.153',
  		     '127.0.0.1', 
                      'localhost',
-		     'postochnaya.myvnc.com',
+		     'postochnaya.onthewifi.com',
     ]
 # Application definition
 
@@ -175,11 +174,9 @@ LOGIN_URL = 'users:login'
 LOGIN_REDIRECT_URL = 'posts:index'
 # LOGOUT_REDIRECT_URL = 'posts:index'
 
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
-STATIC_URL = '/static'
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static/'),
-)
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
