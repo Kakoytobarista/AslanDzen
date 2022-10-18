@@ -40,6 +40,7 @@ if DEBUG is True:
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'core.apps.CoreConfig',
     'users.apps.UsersConfig',
     'posts.apps.PostsConfig',
@@ -50,7 +51,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'sorl.thumbnail',
-    'channels',
 ]
 
 MIDDLEWARE = [
