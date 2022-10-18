@@ -12,15 +12,12 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
-from dotenv import load_dotenv
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
-
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -31,9 +28,9 @@ SECRET_KEY = 's602!acnd(oi7$*!h8=_#796#yca5vt+_-dgr(i26u%docfwm3'
 # SECURITY WARNING: don't run with debug turned on in production!
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sentry_sdk.init(
-    dsn="https://0e2c2c60ea8741e29307fd3b1b048d8e@o1110399.ingest.sentry.io/6139229", 
+    dsn="https://0e2c2c60ea8741e29307fd3b1b048d8e@o1110399.ingest.sentry.io/6139229",
     integrations=[DjangoIntegration()],
-) 
+)
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
@@ -44,15 +41,15 @@ if DEBUG is False:
         '[::1]',
         'testserver',
         '51.250.87.87',
-	'postochnaya.onthewifi.com',
+        'postochnaya.onthewifi.com',
     ]
 
 if DEBUG is True:
     ALLOWED_HOSTS = ['51.250.13.153',
- 		     '127.0.0.1', 
+                     '127.0.0.1',
                      'localhost',
-		     'postochnaya.onthewifi.com',
-    ]
+                     'postochnaya.onthewifi.com',
+                     ]
 # Application definition
 
 INSTALLED_APPS = [
@@ -103,7 +100,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'yatube.wsgi.application'
 ASGI_APPLICATION = 'yatube.asgi.application'
 
-
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
@@ -125,12 +121,11 @@ DATABASES = {
         'HOST': os.getenv('DB_HOST'),
         'PORT': os.getenv('DB_PORT')
     }
-} 
- 
+}
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',  }
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache', }
 }
 
 # Password validation
@@ -151,7 +146,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -165,7 +159,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
@@ -176,7 +169,6 @@ LOGIN_REDIRECT_URL = 'posts:index'
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
-
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
