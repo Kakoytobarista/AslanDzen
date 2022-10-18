@@ -33,7 +33,7 @@ if DEBUG is False:
         '127.0.0.1',
         '[::1]',
         'testserver',
-        '51.250.87.87',
+        '192.241.153.145',
         'postochnaya.onthewifi.com',
     ]
 
@@ -41,6 +41,7 @@ if DEBUG is True:
     ALLOWED_HOSTS = ['51.250.13.153',
                      '127.0.0.1',
                      'localhost',
+                     '192.241.153.145',
                      'postochnaya.onthewifi.com',
                      ]
 # Application definition
