@@ -34,7 +34,7 @@ if DEBUG is False:
         '[::1]',
         'testserver',
         '192.241.153.145',
-        'postochnaya.onthewifi.com',
+        'postochnaya.ddns.net',
     ]
 
 if DEBUG is True:
@@ -42,9 +42,8 @@ if DEBUG is True:
                      '127.0.0.1',
                      'localhost',
                      '192.241.153.145',
-                     'postochnaya.onthewifi.com',
+                     'postochnaya.ddns.net',
                      ]
-# Application definition
 
 INSTALLED_APPS = [
     'core.apps.CoreConfig',
