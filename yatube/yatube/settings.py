@@ -6,7 +6,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.getenv('DJANGO_KEY',
                        default='s602!acnd(oi7$*!h8=_#796#yca5vt+_-dgr(i26u%docfwm3')
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 if DEBUG is False:
     ALLOWED_HOSTS = [
