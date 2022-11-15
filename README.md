@@ -1,6 +1,10 @@
 # AslanDzen
 A web application for viewing, editing and displaying your articles with limited capabilities for authorized and unauthorized users.
 
+<br>Link on host: http://postochnaya.ddns.net/profile/admin/
+
+___
+
 ### Технологии:
 Python==3.8, Django==3.1.7, HTML/CSS/JS, external APIS, sqlite.
 
