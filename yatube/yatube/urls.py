@@ -25,7 +25,6 @@ from django.urls import path, re_path
 from django.views.static import serve 
 
 
-
 urlpatterns = [
     path('', include('posts.urls', namespace='posts')),
     path('admin/', admin.site.urls),
@@ -36,7 +35,7 @@ urlpatterns = [
 ] 
 
 urlpatterns += static(
-        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
+        settings.MEDIA_ROOT, document_root=settings.MEDIA_ROOT
     )
 
 handler404 = page_not_found
