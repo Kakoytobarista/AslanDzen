@@ -64,7 +64,7 @@
           console.log({{ post.id }})
         const chatSocket = new WebSocket(
             'ws://'
-            + '127.0.0.1:6379'
+            + window.location.host + ":8001"
             + '/ws/posts/'
             + '{{ post.id }}'
             + '/'
