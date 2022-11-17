@@ -12,5 +12,5 @@ python3 manage.py shell \
 && \
 python3 manage.py collectstatic --noinput \
 && \
-uvicorn yatube.asgi:application --host 0.0.0.0 --port 8080 " \
+uvicorn yatube.asgi:application --host 0.0.0.0 --port 8000 " \
 ]
