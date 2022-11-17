@@ -25,17 +25,14 @@ if DEBUG is False:
         'localhost',
         '127.0.0.1',
         '[::1]',
-        'testserver',
-        '192.241.153.145',
-        'postochnaya.ddns.net',
+        '24.135.49.81',
     ]
 
 if DEBUG is True:
     ALLOWED_HOSTS = ['51.250.13.153',
                      '127.0.0.1',
                      'localhost',
-                     '192.241.153.145',
-                     'postochnaya.ddns.net',
+                     '24.135.49.81'
                      ]
 
 INSTALLED_APPS = [
