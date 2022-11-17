@@ -36,10 +36,11 @@ if DEBUG is True:
                      ]
 
 INSTALLED_APPS = [
-    "daphne",
+    'channels',
     'core.apps.CoreConfig',
     'users.apps.UsersConfig',
     'posts.apps.PostsConfig',
+    "daphne",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,7 +48,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'sorl.thumbnail',
-    'channels',
 ]
 
 MIDDLEWARE = [
