@@ -8,5 +8,5 @@ CMD [ "sh", "-c", \
 && \
 python3 manage.py collectstatic --noinput \
 && \
-gunicorn yatube.wsgi:application --bind 0:8000" \
+daphne -b 0.0.0.0 -p 8001 yatube.asgi:application" \
 ]
