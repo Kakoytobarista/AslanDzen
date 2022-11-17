@@ -64,7 +64,8 @@
           console.log({{ post.id }})
         const chatSocket = new WebSocket(
             'ws://'
-            + window.location.host + ":8001"
+            + window.location.host
+            + ":8001"
             + '/ws/posts/'
             + '{{ post.id }}'
             + '/'
@@ -105,6 +106,9 @@
             console.log({{ post_id }})
             const messageInputDom = document.querySelector('#chat-message-input');
             const message = messageInputDom.value;
+            console.log(chatSocket)
+            console.log(chatSocket)
+            console.log(chatSocket)
             if (messageInputDom.value !== ""){
                 chatSocket.send(JSON.stringify({
                 'message': message,
