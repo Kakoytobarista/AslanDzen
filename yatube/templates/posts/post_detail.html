@@ -35,7 +35,6 @@
   <div class="card my-4">
     <h5 class="card-header">Добавить комментарий:</h5>
     <div class="card-body">
-      <form method="post" action="{% url 'posts:add_comment' post.id  %}">
         {% csrf_token %}
           <div class="form-floating">
         <div class="form-group mb-2">
@@ -44,7 +43,6 @@
         </div>
         <input id="chat-message-submit" class="btn btn-primary" type="button" value="Send">
               {{ post_id|json_script:"post_id" }}
-      </form>
     </div>
   </div>
 {% endif %}
@@ -75,13 +73,12 @@
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
             console.log(data.message)
-            console.log(data.author)
 
             const newDiv = document.createElement("div");
             newDiv.classList.add("popover-header");
             newDiv.innerHTML += "<hr>";
 
-            var author = "<h5 class='mt-0'>" + data.author + "</h5>";
+            var author = "<h5 class='mt-0'>" + data.username + "</h5>";
             newDiv.innerHTML += author;
 
             var new_comment = "<p id='chat-log'>" + data.message + "</p>" +
@@ -106,10 +103,15 @@
         document.querySelector('#chat-message-submit').onclick = function(e) {
             const messageInputDom = document.querySelector('#chat-message-input');
             const message = messageInputDom.value;
-            chatSocket.send(JSON.stringify({
-                'message': message
+            if (messageInputDom.value !== ""){
+                chatSocket.send(JSON.stringify({
+                'message': message,
+                'username': "{{ request.user.username }}",
+                'room': {{ post_id }}
             }));
             messageInputDom.value = '';
+            }
+
         };
     </script>
 

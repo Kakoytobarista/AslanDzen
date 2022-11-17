@@ -136,16 +136,16 @@ def post_delete(request, post_id):
 
 @login_required
 def add_comment(request, post_id):
-    form = CommentForm(request.POST or None)
+    form = CommentForm()
     post = get_object_or_404(Post,
                              id=post_id)
-    if form.is_valid():
-        comment = form.save(commit=False)
-        comment.author = request.user
-        comment.post = post
-        comment.save()
-
-    return redirect(reverse("posts:post_detail", args=[post_id]))
+    context = {
+        "post_id": post_id,
+        "form": form,
+        "post": post,
+        "author": request.user.username
+    }
+    return render(request, "posts/post_detail.html", context)
 
 
 @login_required
