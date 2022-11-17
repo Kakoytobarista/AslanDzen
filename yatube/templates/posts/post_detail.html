@@ -35,15 +35,14 @@
   <div class="card my-4">
     <h5 class="card-header">Добавить комментарий:</h5>
     <div class="card-body">
-      <form method="post" action="{% url 'posts:add_comment' post.id  %}">
         {% csrf_token %}
           <div class="form-floating">
         <div class="form-group mb-2">
           {{ form.text|addclass:"form-control" }}
 </div>
         </div>
-        <button type="submit" class="btn btn-primary" id="send-comment">Отправить</button>
-      </form>
+        <input id="chat-message-submit" class="btn btn-primary" type="button" value="Send">
+              {{ post_id|json_script:"post_id" }}
     </div>
   </div>
 {% endif %}
@@ -53,16 +52,69 @@
     <div class="popover-header">
     <hr>
       <h5 class="mt-0">
-        <a href="{% url 'posts:profile' comment.author %}">
           {{ comment.author.username }}
-        </a>
       </h5>
-        <p>{{ comment.text }}<br>
-         {{ comment.created }}
+        <p id="chat-log">{{ comment.text }}<br>
+         {{ created }}
         </p>
       </div>
     </div>
-{% endfor %}
+    {% endfor %}
+          <script>
+        const post_id = JSON.parse(document.getElementById('post_id').textContent);
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/posts/'
+            + post_id
+            + '/'
+        );
+
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            console.log(data.message)
+            const commentList = document.querySelector("#comments-list");
+            let newDiv = document.createElement("div");
+            commentList.insertAdjacentElement('afterend', newDiv);
+            newDiv.classList.add("popover-header");
+            newDiv.innerHTML += "<hr>";
+
+            var author = "<h5 class='mt-0'>" + data.username + "</h5>";
+            newDiv.innerHTML += author;
+
+            var new_comment = "<p id='chat-log'>" + data.message + "</p>" +
+                 data.created;
+            newDiv.innerHTML += new_comment;
+            my_div = document.getElementById("org_div1");
+            document.body.insertBefore(newDiv, my_div);
+            document.querySelector('#chat-log').value += (data.message + '\n');
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly', e);
+        };
+
+        document.querySelector('#chat-message-input').focus();
+        document.querySelector('#chat-message-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+
+        document.querySelector('#chat-message-submit').onclick = function(e) {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value;
+            if (messageInputDom.value !== ""){
+                chatSocket.send(JSON.stringify({
+                'message': message,
+                'username': "{{ request.user.username }}",
+                'room': {{ post_id }}
+            }));
+            messageInputDom.value = '';
+            }
+
+        };
+    </script>
 
 {% include 'posts/includes/paginator.html' %}
 {% endblock %}
