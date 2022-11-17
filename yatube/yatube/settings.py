@@ -26,21 +26,23 @@ if DEBUG is False:
         '127.0.0.1',
         '[::1]',
         '24.135.49.81',
+        '192.168.144.4'
     ]
 
 if DEBUG is True:
     ALLOWED_HOSTS = ['51.250.13.153',
                      '127.0.0.1',
                      'localhost',
-                     '24.135.49.81'
+                     '24.135.49.81',
+                     '192.168.144.4'
                      ]
 
 INSTALLED_APPS = [
     'channels',
+    "daphne",
     'core.apps.CoreConfig',
     'users.apps.UsersConfig',
     'posts.apps.PostsConfig',
-    "daphne",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
