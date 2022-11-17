@@ -73,8 +73,9 @@
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
             console.log(data.message)
-
-            const newDiv = document.createElement("div");
+            const commentList = document.querySelector("#comments-list");
+            let newDiv = document.createElement("div");
+            commentList.insertAdjacentElement('afterend', newDiv);
             newDiv.classList.add("popover-header");
             newDiv.innerHTML += "<hr>";
 

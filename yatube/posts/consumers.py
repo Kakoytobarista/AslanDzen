@@ -3,11 +3,8 @@ import datetime
 import json
 
 from asgiref.sync import sync_to_async
-from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-
-from django.shortcuts import get_object_or_404
 
 from posts.models import Post, Comment
 
@@ -17,11 +14,15 @@ from django.contrib.auth.models import User
 class WSConsumers(AsyncWebsocketConsumer):
     author = None
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(args, kwargs)
+        self.post_id = None
+        self.post_group_name = None
+
     async def connect(self):
         self.post_id = self.scope['url_route']['kwargs']['post_id']
         self.post_group_name = 'posts_%s' % self.post_id
 
-        # Join room group
         await self.channel_layer.group_add(
             self.post_group_name,
             self.channel_name
@@ -44,9 +45,7 @@ class WSConsumers(AsyncWebsocketConsumer):
         room = data['room']
 
         comment = await self.save_message(username, room, message)
-        print(comment)
 
-        # Send message to room group
         await self.channel_layer.group_send(
             self.post_group_name,
             {
