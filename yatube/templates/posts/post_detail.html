@@ -61,6 +61,7 @@
     </div>
     {% endfor %}
           <script>
+          console.log({{ post.id }})
         const chatSocket = new WebSocket(
             'ws://'
             + window.location.host
