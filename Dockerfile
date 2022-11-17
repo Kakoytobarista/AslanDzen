@@ -1,6 +1,8 @@
 FROM python:3.8.5
 WORKDIR /code
 COPY yatube/requirements.txt .
+RUN pip3 install --upgrade pip
+RUN pip3 install --upgrade attrs
 RUN pip3 install -r requirements.txt
 COPY /yatube .
 CMD [ "sh", "-c", \
