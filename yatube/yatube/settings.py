@@ -36,6 +36,7 @@ if DEBUG is True:
                      ]
 
 INSTALLED_APPS = [
+    "daphne",
     'core.apps.CoreConfig',
     'users.apps.UsersConfig',
     'posts.apps.PostsConfig',
