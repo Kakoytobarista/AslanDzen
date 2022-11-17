@@ -108,7 +108,7 @@
                 chatSocket.send(JSON.stringify({
                 'message': message,
                 'username': "{{ request.user.username }}",
-                'room': {{ post_id }}
+                'room': post_id
             }));
             messageInputDom.value = '';
             }
