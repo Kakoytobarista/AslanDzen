@@ -102,13 +102,14 @@
         };
 
         document.querySelector('#chat-message-submit').onclick = function(e) {
+            console.log({{ post_id }})
             const messageInputDom = document.querySelector('#chat-message-input');
             const message = messageInputDom.value;
             if (messageInputDom.value !== ""){
                 chatSocket.send(JSON.stringify({
                 'message': message,
                 'username': "{{ request.user.username }}",
-                'room': post_id
+                'room': {{ post.id }}
             }));
             messageInputDom.value = '';
             }
