@@ -61,12 +61,11 @@
     </div>
     {% endfor %}
           <script>
-        const post_id = JSON.parse(document.getElementById('post_id').textContent);
         const chatSocket = new WebSocket(
             'ws://'
             + window.location.host
             + '/ws/posts/'
-            + post_id
+            + {{ post_id }}
             + '/'
         );
 
