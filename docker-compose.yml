@@ -33,14 +33,11 @@ services:
       - db
 
   cache:
-    image: redis:6.2-alpine
+    image: redis:5
     user: root
-    restart: always
-    expose:
-      - 6379
+    restart: unless-stopped
     ports:
       - '6379:6379'
-    command: -d redis:5
     volumes:
       - cache:/data
 
