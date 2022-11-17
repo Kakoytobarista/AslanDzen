@@ -27,6 +27,7 @@ if DEBUG is False:
         '[::1]',
         '24.135.49.81',
         '192.241.153.145',
+        'postochnaya.ddns.net',
     ]
 
 if DEBUG is True:
@@ -35,6 +36,7 @@ if DEBUG is True:
                      'localhost',
                      '24.135.49.81',
                      '192.241.153.145',
+                     'postochnaya.ddns.net',
                      ]
 
 INSTALLED_APPS = [
