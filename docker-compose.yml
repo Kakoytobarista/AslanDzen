@@ -30,6 +30,7 @@ services:
     restart: always
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - /etc/letsencrypt/:/etc/letsencrypt
       - static_value:/var/html/static/
       - media_value:/var/html/media/
     depends_on:
