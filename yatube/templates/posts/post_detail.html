@@ -62,8 +62,9 @@
     {% endfor %}
           <script>
           console.log({{ post.id }})
+        const ws_scheme = window.location.protocol === "https:" ? "wss" : "ws";
         const chatSocket = new WebSocket(
-            'ws://'
+            ws_scheme
             + window.location.host
             + ":8001"
             + '/ws/posts/'
