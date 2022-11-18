@@ -33,7 +33,6 @@ services:
       - /etc/letsencrypt/:/etc/letsencrypt
       - ./yatube/static:/var/html/static/
       - ./yatube/media:/var/html/media/
-      - media_value:/var/html/media/
     command: /bin/sh -c "nginx -g 'daemon off;'"
     depends_on:
       - web
