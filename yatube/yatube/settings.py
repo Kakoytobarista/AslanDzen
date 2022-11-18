@@ -101,7 +101,7 @@ DATABASES = {
 CACHES = {
     "default": {
         "BACKEND": 'django_redis.cache.RedisCache',
-        "LOCATION": 'redis://cache:6379',
+        "LOCATION": 'redis://127.0.0.1:6379',
         "OPTIONS": {
             "CLIENT_CLASS": 'django_redis.client.DefaultClient',
         }
@@ -136,8 +136,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
-
 
 LOGIN_URL = 'users:login'
 LOGIN_REDIRECT_URL = 'posts:index'
