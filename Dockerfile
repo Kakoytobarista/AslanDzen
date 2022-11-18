@@ -12,5 +12,7 @@ python3 manage.py shell \
 && \
 python3 manage.py collectstatic --noinput \
 && \
+python3 manage.py loaddata data.json \
+&& \
 daphne -b 0.0.0.0 -p 8001 yatube.asgi:application & gunicorn yatube.wsgi:application --bind 0.0.0.0:8000 --reload" \
 ]
