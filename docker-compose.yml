@@ -11,8 +11,6 @@ services:
   web:
     build: .
     restart: always
-    volumes:
-      - media_value:/code/media/
     ports:
       - "8000:8000"
       - "8001:8001"
@@ -45,7 +43,6 @@ services:
       - '6379:6379'
     volumes:
       - cache:/data
-
 
 volumes:
   postgres_data:
