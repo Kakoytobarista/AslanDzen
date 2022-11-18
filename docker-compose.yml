@@ -31,11 +31,10 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - /etc/letsencrypt/:/etc/letsencrypt
-      - static_value:/var/html/static/
+      - ./yatube/static:/var/html/static/
       - media_value:/var/html/media/
     depends_on:
       - web
-      - db
 
   cache:
     image: redis:5
