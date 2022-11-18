@@ -15,7 +15,7 @@ services:
       - static_value:/code/static/
       - media_value:/code/media/
     expose:
-      - 8001
+      - 8000
     depends_on:
       - db
 
