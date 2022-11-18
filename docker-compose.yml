@@ -11,6 +11,8 @@ services:
   web:
     build: .
     restart: always
+    volumes:
+      - media_value:/code/media/
     ports:
       - "8000:8000"
       - "8001:8001"
@@ -30,7 +32,7 @@ services:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - /etc/letsencrypt/:/etc/letsencrypt
       - ./yatube/static:/var/html/static/
-      - ./yatube/media:/var/html/media/
+      - media_value:/var/html/media/
     command: /bin/sh -c "nginx -g 'daemon off;'"
     depends_on:
       - web
@@ -43,6 +45,7 @@ services:
       - '6379:6379'
     volumes:
       - cache:/data
+
 
 volumes:
   postgres_data:
