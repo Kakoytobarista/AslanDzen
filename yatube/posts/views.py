@@ -12,7 +12,6 @@ from yatube.settings import PAGINATOR_OBJECTS_PER_PAGE as per_page
 from yatube.settings import PAGINATOR_COMMENT_PER_PAGE as per_page_comment
 
 
-@cache_page(1 * 1)
 def get_page_object(request, posts):
     paginator = Paginator(posts, per_page)
     page_number = request.GET.get('page')
@@ -26,6 +25,7 @@ def get_users(request, username):
     return follower, following
 
 
+@cache_page(1 * 1)
 def index(request):
     template = 'posts/index.html'
     posts = Post.objects.all()
@@ -37,6 +37,7 @@ def index(request):
     return render(request, template, context)
 
 
+@cache_page(1 * 1)
 def group_posts(request, slug):
     template = 'posts/group_list.html'
     group = get_object_or_404(Group, slug=slug)
@@ -49,6 +50,7 @@ def group_posts(request, slug):
     return render(request, template, context)
 
 
+@cache_page(1 * 1)
 def profile(request, username):
     author = get_object_or_404(User, username=username)
     posts = author.posts.all()
@@ -68,6 +70,7 @@ def profile(request, username):
     return render(request, 'posts/profile.html', context)
 
 
+@cache_page(1 * 1)
 def post_detail(request, post_id):
     form = CommentForm(request.POST or None)
     post = get_object_or_404(Post, id=post_id)
