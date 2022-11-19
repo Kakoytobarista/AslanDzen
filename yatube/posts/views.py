@@ -12,6 +12,7 @@ from yatube.settings import PAGINATOR_OBJECTS_PER_PAGE as per_page
 from yatube.settings import PAGINATOR_COMMENT_PER_PAGE as per_page_comment
 
 
+@cache_page(1 * 1)
 def get_page_object(request, posts):
     paginator = Paginator(posts, per_page)
     page_number = request.GET.get('page')
