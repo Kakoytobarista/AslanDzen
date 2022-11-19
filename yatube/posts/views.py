@@ -25,7 +25,6 @@ def get_users(request, username):
     return follower, following
 
 
-@cache_page(1 * 1)
 def index(request):
     template = 'posts/index.html'
     posts = Post.objects.all()
