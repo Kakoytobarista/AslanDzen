@@ -28,6 +28,7 @@ if DEBUG is False:
         '24.135.49.81',
         '192.241.153.145',
         'postochnaya.ddns.net',
+        '0.0.0.0',
     ]
 
 if DEBUG is True:
