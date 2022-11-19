@@ -43,6 +43,7 @@ services:
     restart: unless-stopped
     ports:
       - '6379:6379'
+    command: chmod 777 /etc/
     volumes:
       - cache:/data
 
