@@ -9,11 +9,11 @@ COPY /yatube .
 CMD [ "sh", "-c", \
 "python3 manage.py migrate \
 && \
+python3 manage.py loaddata data.json \
+&& \
 python3 manage.py shell \
 && \
 python3 manage.py collectstatic --noinput \
 && \
-gunicorn yatube.wsgi:application --bind 0.0.0.0:8000 --reload & daphne -e ssl:8001:privateKey=privkey.pem:certKey=cert.pem yatube.asgi:application \
-&& \
-python3 manage.py loaddata data.json" \
+gunicorn yatube.wsgi:application --bind 0.0.0.0:8000 --reload & daphne -e ssl:8001:privateKey=privkey.pem:certKey=cert.pem yatube.asgi:application " \
 ]
