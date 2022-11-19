@@ -15,5 +15,5 @@ python3 manage.py shell \
 && \
 python3 manage.py collectstatic --noinput \
 && \
-gunicorn yatube.wsgi:application --bind 0.0.0.0:8000 --reload & daphne -e ssl:8001:privateKey=privkey.pem:certKey=cert.pem yatube.asgi:application " \
+gunicorn yatube.wsgi:application --bind 0.0.0.0:8000 --timeout 600 --reload & daphne -e ssl:8001:privateKey=privkey.pem:certKey=cert.pem yatube.asgi:application " \
 ]
