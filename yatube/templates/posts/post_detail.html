@@ -51,7 +51,7 @@
       <div class="comment__container opened" id="first-comment">
         <div class="comment__card">
           <h3 class="comment__title flex_element">{{ comment.author.username }}</h3>
-          <smal><h10 id="date" class="flex_element">{{ created }}</h10>
+          <smal><p id="date" style="font-size: 10px;" class="flex_element">{{ created }}</p>
           <p>
           {{ comment.text }}
           </p>
@@ -73,7 +73,7 @@
         );
 
         chatSocket.onmessage = function(e) {
-            console.log('DASDASDAS')
+            const today = new Date();
             const data = JSON.parse(e.data);
             console.log(data.message)
             const parentNodeMain = document.querySelector('main')
@@ -94,10 +94,12 @@
             userNameDiv.textContent = data.username
 
             const smallBlockWithTextAndDate = commentCard.appendChild(document.createElement('small'))
-            const dateElement = smallBlockWithTextAndDate.appendChild(document.createElement('h7'))
+            const dateElement = smallBlockWithTextAndDate.appendChild(document.createElement('p'))
             dateElement.classList.add('flex_element')
             dateElement.setAttribute('id', 'date')
-            dateElement.textContent = data.created
+            dateElement.setAttribute('style', 'font-size:10px;')
+            dateElement.textContent = `${today.getFullYear().toString().slice(2)}-${today.getMonth() + 1}-${today.getUTCDate()},
+                                       ${today.getHours() - 1}:${today.getMinutes()}`;
 
             const pElementTextContent = smallBlockWithTextAndDate.appendChild(document.createElement('p'))
             pElementTextContent.textContent = data.message

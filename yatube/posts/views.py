@@ -75,6 +75,7 @@ def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     comments = post.comments.all()
     count_posts = post.author.posts.count()
+    created = datetime.now().strftime("%y-%m-%d, %H:%M")
     context = {
         "post_id": post_id,
         'form': form,
@@ -82,7 +83,7 @@ def post_detail(request, post_id):
         'post': post,
         'count_posts': count_posts,
         'page_obj': comments,
-        "created": datetime.now().strftime("%a, %d %B, %Y, %H:%M")
+        "created": created
     }
     return render(request,
                   'posts/post_detail.html',
