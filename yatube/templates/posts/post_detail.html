@@ -64,11 +64,13 @@
     {% endfor %}
           <script>
         const post_id = JSON.parse(document.getElementById('post_id').textContent);
+        const ws_scheme = window.location.protocol === "https:" ? "wss://" : "ws://";
         const chatSocket = new WebSocket(
-            'ws://'
+            ws_scheme
             + window.location.host
+            + ":8001"
             + '/ws/posts/'
-            + post_id
+            + '{{ post.id }}'
             + '/'
         );
 
