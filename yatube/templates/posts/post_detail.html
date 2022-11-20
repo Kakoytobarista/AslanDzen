@@ -32,7 +32,7 @@
 </div>
 
 {% if user.is_authenticated %}
-  <div class="card my-4">
+  <div class="card my-4 text-center" style="width:80%; right: auto; left:10%">
     <h5 class="card-header">Добавить комментарий:</h5>
     <div class="card-body">
         {% csrf_token %}
@@ -46,51 +46,70 @@
     </div>
   </div>
 {% endif %}
-
-  <div class="media mb-4" id="comments-list">
-  {% for comment in page_obj %}
-    <div class="popover-header">
-    <hr>
-      <h5 class="mt-0">
-          {{ comment.author.username }}
-      </h5>
-        <p id="chat-log">{{ comment.text }}<br>
-         {{ comment.created }}
-        </p>
+      {% for comment in page_obj %}
+    <div class="container_comment">
+      <div class="comment__container opened" id="first-comment">
+        <div class="comment__card">
+          <h3 class="comment__title flex_element">{{ comment.author.username }}</h3>
+          <smal><h10 id="date" class="flex_element">{{ created }}</h10>
+          <p>
+          {{ comment.text }}
+          </p>
+            <div class="comment__card-footer">
+              <div>Likes 123</div>
+            </div>
+        </div>
       </div>
     </div>
     {% endfor %}
           <script>
-          console.log({{ post.id }})
-        const ws_scheme = window.location.protocol === "https:" ? "wss://" : "ws://";
+        const post_id = JSON.parse(document.getElementById('post_id').textContent);
         const chatSocket = new WebSocket(
-            ws_scheme
+            'ws://'
             + window.location.host
-            + ":8001"
             + '/ws/posts/'
-            + '{{ post.id }}'
+            + post_id
             + '/'
         );
 
         chatSocket.onmessage = function(e) {
+            console.log('DASDASDAS')
             const data = JSON.parse(e.data);
             console.log(data.message)
-            const commentList = document.querySelector("#comments-list");
-            let newDiv = document.createElement("div");
-            commentList.insertAdjacentElement('afterend', newDiv);
-            newDiv.classList.add("popover-header");
-            newDiv.innerHTML += "<hr>";
+            const parentNodeMain = document.querySelector('main')
 
-            var author = "<h5 class='mt-0'>" + data.username + "</h5>";
-            newDiv.innerHTML += author;
+            const containerDiv = parentNodeMain.appendChild(document.createElement('div'))
+            containerDiv.classList.add('container_comment')
 
-            var new_comment = "<p id='chat-log'>" + data.message + "</p>" +
-                 data.created;
-            newDiv.innerHTML += new_comment;
-            my_div = document.getElementById("org_div1");
-            document.body.insertBefore(newDiv, my_div);
-            document.querySelector('#chat-log').value += (data.message + '\n');
+            const commentContainerInternal = containerDiv.appendChild(document.createElement('div'))
+            commentContainerInternal.classList.add('comment__container')
+            commentContainerInternal.classList.add('opened')
+
+            const commentCard = commentContainerInternal.appendChild(document.createElement('div'))
+            commentCard.classList.add('comment__card')
+
+            const userNameDiv = commentCard.appendChild(document.createElement('h3'))
+            userNameDiv.classList.add('comment__title')
+            userNameDiv.classList.add('flex_element')
+            userNameDiv.textContent = data.username
+
+            const smallBlockWithTextAndDate = commentCard.appendChild(document.createElement('small'))
+            const dateElement = smallBlockWithTextAndDate.appendChild(document.createElement('h7'))
+            dateElement.classList.add('flex_element')
+            dateElement.setAttribute('id', 'date')
+            dateElement.textContent = data.created
+
+            const pElementTextContent = smallBlockWithTextAndDate.appendChild(document.createElement('p'))
+            pElementTextContent.textContent = data.message
+
+            const commentFooterDiv = smallBlockWithTextAndDate.appendChild(document.createElement('div'))
+            commentFooterDiv.classList.add('comment__card-footer')
+
+            const internalDivLike = commentFooterDiv.appendChild(document.createElement('div'))
+            internalDivLike.textContent = "Likes: 123"
+
         };
+
 
         chatSocket.onclose = function(e) {
             console.error('Chat socket closed unexpectedly', e);
@@ -98,27 +117,25 @@
 
         document.querySelector('#chat-message-input').focus();
         document.querySelector('#chat-message-input').onkeyup = function(e) {
-            if (e.keyCode === 13) {  // enter, return
+            if (e.keyCode === 13) {
                 document.querySelector('#chat-message-submit').click();
             }
         };
 
         document.querySelector('#chat-message-submit').onclick = function(e) {
+            console.log(e)
             console.log({{ post_id }})
             const messageInputDom = document.querySelector('#chat-message-input');
             const message = messageInputDom.value;
-            console.log(chatSocket)
-            console.log(chatSocket)
-            console.log(chatSocket)
-            if (messageInputDom.value !== ""){
+            if (messageInputDom.value !== "") {
+                console.log("CLICK TO SUBMIT")
                 chatSocket.send(JSON.stringify({
-                'message': message,
-                'username': "{{ request.user.username }}",
-                'room': {{ post.id }}
-            }));
-            messageInputDom.value = '';
+                    'message': message,
+                    'username': "{{ request.user.username }}",
+                    'room': {{ post.id }}
+                }));
+                messageInputDom.value = '';
             }
-
         };
     </script>
 
