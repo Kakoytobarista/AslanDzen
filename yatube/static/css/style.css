@@ -16,10 +16,8 @@ body {
 }
 
 #footer {
-  position: absolute;
   bottom: 0;
-  width: 100%;
-  height: 60px;
+  margin-top: calc(5% + 60px);
 }
 
 
@@ -37,4 +35,83 @@ body {
 
 #up_block_post {
     margin-right: 20px;
+}
+
+
+
+/*Comment block*/
+
+/**,*/
+/**::before,*/
+/**::after {*/
+/*  margin: 0;*/
+/*  padding: 0;*/
+/*  box-sizing: border-box;*/
+/*}*/
+
+.container_comment {
+  width: min(50%, 900px);
+  margin: 3rem 3rem;
+
+
+}
+
+.comment__container {
+  display: none;
+  position: relative;
+}
+
+.comment__container.opened {
+  display: block;
+}
+
+.comment__container::before {
+  content: "";
+  background-color: rgb(170, 170, 170);
+  position: absolute;
+  min-height: 100%;
+  width: 1px;
+  left: -10px;
+}
+
+
+.comment__card {
+  padding: 20px;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 0.5rem;
+  min-width: 100%;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+}
+
+.comment__card h3,
+.comment__card p {
+  margin-bottom: 2rem;
+}
+
+.comment__card-footer {
+  display: flex;
+  font-size: 0.85rem;
+  opacity: 0.6;
+  gap: 30px;
+  justify-content: flex-end;
+
+}
+
+.show-replies {
+  cursor: pointer;
+}
+
+.comment__card h5 {
+  text-align: right;
+}
+
+.flex_element {
+  display: inline-block;
+
+}
+
+#date {
+  float: right;
+  font-size: 15px;
 }
