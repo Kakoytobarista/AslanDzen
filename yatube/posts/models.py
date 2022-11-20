@@ -59,6 +59,10 @@ class Comment(models.Model):
     created = models.DateTimeField('Дата создания',
                                    auto_now_add=True,
                                    db_index=True)
+    likes = models.ForeignKey(User, verbose_name="Лайки у поста",
+                              related_name='comments',
+                              on_delete=models.SET_NULL,
+                              many=True)
 
     def __str__(self):
         return self.text
