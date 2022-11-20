@@ -75,9 +75,7 @@
         );
 
         chatSocket.onmessage = function(e) {
-            console.log('DASDASDAS')
             const data = JSON.parse(e.data);
-            console.log(data.message)
             const parentNodeMain = document.querySelector('main')
 
             const containerDiv = parentNodeMain.appendChild(document.createElement('div'))
@@ -125,12 +123,9 @@
         };
 
         document.querySelector('#chat-message-submit').onclick = function(e) {
-            console.log(e)
-            console.log({{ post_id }})
             const messageInputDom = document.querySelector('#chat-message-input');
             const message = messageInputDom.value;
             if (messageInputDom.value !== "") {
-                console.log("CLICK TO SUBMIT")
                 chatSocket.send(JSON.stringify({
                     'message': message,
                     'username': "{{ request.user.username }}",
