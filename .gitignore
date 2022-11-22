@@ -147,8 +147,7 @@ hw05_final/.idea
 .mypy_cache
 
 # папки со статикой и медиа
-static/
-yatube/posts/static/
+yatube/posts/static/admin
 yatube/media/
 
 cert
