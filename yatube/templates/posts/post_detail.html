@@ -70,6 +70,7 @@
             </div>
         </div>
     {% endfor %}
+    {% if user.is_authenticated %}
     <script>
         const post_id = JSON.parse(document.getElementById('post_id').textContent);
         const ws_scheme = window.location.protocol === "https:" ? "wss://" : "ws://";
@@ -183,6 +184,8 @@
         });
 
     </script>
+    {% else %}
+    {% endif %}
 
     {% include 'posts/includes/paginator.html' %}
 {% endblock %}

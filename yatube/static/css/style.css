@@ -17,7 +17,7 @@ body {
 
 #footer {
   bottom: 0;
-  margin-top: calc(5% + 60px);
+  margin-top: calc(30% + 60px);
 }
 
 
@@ -37,17 +37,6 @@ body {
     margin-right: 20px;
 }
 
-
-
-/*Comment block*/
-
-/**,*/
-/**::before,*/
-/**::after {*/
-/*  margin: 0;*/
-/*  padding: 0;*/
-/*  box-sizing: border-box;*/
-/*}*/
 
 .container_comment {
   width: min(50%, 900px);
@@ -112,7 +101,7 @@ body {
 }
 
 #date {
-  float: right;
+  float: right !important;
   font-size: 15px;
 }
 
