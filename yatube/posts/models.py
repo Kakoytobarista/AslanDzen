@@ -59,13 +59,16 @@ class Comment(models.Model):
     created = models.DateTimeField('Дата создания',
                                    auto_now_add=True,
                                    db_index=True)
-    likes = models.ForeignKey(User, verbose_name="Лайки у поста",
-                              related_name='comments',
-                              on_delete=models.SET_NULL,
-                              many=True)
+    likes = models.ManyToManyField(User, verbose_name="Лайки",
+                                   related_name='users',
+                                   blank=True
+                                   )
+
+    def get_likes(self):
+        return len(self.likes.prefetch_related())
 
     def __str__(self):
-        return self.text
+        return f"{self.text}, likes: {self.likes}"
 
  
 class Follow(models.Model):

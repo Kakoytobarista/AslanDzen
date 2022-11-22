@@ -1,68 +1,74 @@
 {% extends "base.html" %}
 {% load user_filters %}
+{% load static %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="row">
-        <aside class="col-12 col-md-3">
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">
-                Дата публикации: {{ post.pub_date|date:"d E Y" }}
-                </li>
-                {% if post.group %}
-                <li class="list-group-item">
-                Группа: <a type="button" id="btn_main_page" class="btn btn-outline-primary" href="{% url 'posts:group_list' post.group.slug %}">{{ post.group }}</a>
-                {% endif %}
-                </li>
-                <li class="list-group-item">
-                    Автор: <a class="btn btn-outline-primary" href="{% url 'posts:profile' post.author %}">{{ post.author.get_full_name }}</a>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                Всего постов автора:  {{ count_posts }}
-                </li>
-                <li class="list-group-item">
-                </a>
-                </li>
-            </ul>
-        </aside>
-        <article id="text-detail-post" class="col-12 col-md-9">
-        {% include 'posts/includes/post_with_photo.html' %}
-        </article>
-    </div>
-</div>
-
-{% if user.is_authenticated %}
-  <div class="card my-4 text-center" style="width:80%; right: auto; left:10%">
-    <h5 class="card-header">Добавить комментарий:</h5>
-    <div class="card-body">
-        {% csrf_token %}
-          <div class="form-floating">
-        <div class="form-group mb-2">
-          {{ form.text|addclass:"form-control" }}
-</div>
+    <div class="container py-5">
+        <div class="row">
+            <aside class="col-12 col-md-3">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        Дата публикации: {{ post.pub_date|date:"d E Y" }}
+                    </li>
+                    {% if post.group %}
+                        <li class="list-group-item">
+                        Группа:<a type="button" id="btn_main_page" class="btn btn-outline-primary"
+                                  href="{% url 'posts:group_list' post.group.slug %}">{{ post.group }}</a>
+                    {% endif %}
+                    </li>
+                    <li class="list-group-item">
+                        Автор: <a class="btn btn-outline-primary"
+                                  href="{% url 'posts:profile' post.author %}">{{ post.author.get_full_name }}</a>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Всего постов автора: {{ count_posts }}
+                    </li>
+                    <li class="list-group-item">
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+            <article id="text-detail-post" class="col-12 col-md-9">
+                {% include 'posts/includes/post_with_photo.html' %}
+            </article>
         </div>
-        <input id="chat-message-submit" class="btn btn-primary" type="button" value="Send">
-              {{ post_id|json_script:"post_id" }}
     </div>
-  </div>
-{% endif %}
-      {% for comment in page_obj %}
-    <div class="container_comment">
-      <div class="comment__container opened" id="first-comment">
-        <div class="comment__card">
-          <h3 class="comment__title flex_element">{{ comment.author.username }}</h3>
-          <smal><p id="date" style="font-size: 10px;" class="flex_element">{{ created }}</p>
-          <p>
-          {{ comment.text }}
-          </p>
-            <div class="comment__card-footer">
-              <div>Likes 123</div>
+
+    {% if user.is_authenticated %}
+        <div class="card my-4 text-center" style="width:80%; right: auto; left:10%">
+            <h5 class="card-header">Добавить комментарий:</h5>
+            <div class="card-body">
+                {% csrf_token %}
+                <div class="form-floating">
+                    <div class="form-group mb-2">
+                        {{ form.text|addclass:"form-control" }}
+                    </div>
+                </div>
+                <input id="chat-message-submit" class="btn btn-primary" type="button" value="Send">
+                {{ post_id|json_script:"post_id" }}
             </div>
         </div>
-      </div>
-    </div>
+    {% endif %}
+    {% for comment in page_obj %}
+        <div class="container_comment">
+            <div class="comment__container opened" id="first-comment">
+                <div class="comment__card">
+                    <h3 class="comment__title flex_element">{{ comment.author.username }}</h3>
+                    <smal><p id="date" style="font-size: 10px;" class="flex_element">{{ created }}</p></smal>
+                    <p>
+                        {{ comment.text }}
+                    </p>
+                    <div class="comment__card-footer">
+                        <div>
+                        <img src="{% static 'img/like.png' %}" class="likes" type="button" id="{{ comment.id|safe }}">
+                            <input class="like_counter" value="{{ comment.get_likes }}" id="{{ comment.id|safe }}" type="button">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     {% endfor %}
-          <script>
+    <script>
         const post_id = JSON.parse(document.getElementById('post_id').textContent);
         const chatSocket = new WebSocket(
             'ws://'
@@ -72,74 +78,104 @@
             + '/'
         );
 
-        chatSocket.onmessage = function(e) {
+        chatSocket.onmessage = function (e) {
             const today = new Date();
             const data = JSON.parse(e.data);
-            console.log(data.message)
-            const parentNodeMain = document.querySelector('main')
 
-            const containerDiv = parentNodeMain.appendChild(document.createElement('div'))
-            containerDiv.classList.add('container_comment')
+            if (data.type === 'chat_message') {
+                const parentNodeMain = document.querySelector('main')
 
-            const commentContainerInternal = containerDiv.appendChild(document.createElement('div'))
-            commentContainerInternal.classList.add('comment__container')
-            commentContainerInternal.classList.add('opened')
+                const containerDiv = parentNodeMain.appendChild(document.createElement('div'))
+                containerDiv.classList.add('container_comment')
 
-            const commentCard = commentContainerInternal.appendChild(document.createElement('div'))
-            commentCard.classList.add('comment__card')
+                const commentContainerInternal = containerDiv.appendChild(document.createElement('div'))
+                commentContainerInternal.classList.add('comment__container')
+                commentContainerInternal.classList.add('opened')
 
-            const userNameDiv = commentCard.appendChild(document.createElement('h3'))
-            userNameDiv.classList.add('comment__title')
-            userNameDiv.classList.add('flex_element')
-            userNameDiv.textContent = data.username
+                const commentCard = commentContainerInternal.appendChild(document.createElement('div'))
+                commentCard.classList.add('comment__card')
 
-            const smallBlockWithTextAndDate = commentCard.appendChild(document.createElement('small'))
-            const dateElement = smallBlockWithTextAndDate.appendChild(document.createElement('p'))
-            dateElement.classList.add('flex_element')
-            dateElement.setAttribute('id', 'date')
-            dateElement.setAttribute('style', 'font-size:10px;')
-            dateElement.textContent = `${today.getFullYear().toString().slice(2)}-${today.getMonth() + 1}-${today.getUTCDate()},
+                const userNameDiv = commentCard.appendChild(document.createElement('h3'))
+                userNameDiv.classList.add('comment__title')
+                userNameDiv.classList.add('flex_element')
+                userNameDiv.textContent = data.username
+
+                const smallBlockWithTextAndDate = commentCard.appendChild(document.createElement('small'))
+                const dateElement = smallBlockWithTextAndDate.appendChild(document.createElement('p'))
+                dateElement.classList.add('flex_element')
+                dateElement.setAttribute('id', 'date')
+                dateElement.setAttribute('style', 'font-size:10px;')
+                dateElement.textContent = `${today.getFullYear().toString().slice(2)}-${today.getMonth() + 1}-${today.getUTCDate()},
                                        ${today.getHours() - 1}:${today.getMinutes()}`;
 
-            const pElementTextContent = smallBlockWithTextAndDate.appendChild(document.createElement('p'))
-            pElementTextContent.textContent = data.message
+                const pElementTextContent = commentCard.appendChild(document.createElement('p'))
+                pElementTextContent.textContent = data.message
 
-            const commentFooterDiv = smallBlockWithTextAndDate.appendChild(document.createElement('div'))
-            commentFooterDiv.classList.add('comment__card-footer')
+                const commentFooterDiv = commentCard.appendChild(document.createElement('div'))
+                commentFooterDiv.classList.add('comment__card-footer')
 
-            const internalDivLike = commentFooterDiv.appendChild(document.createElement('div'))
-            internalDivLike.textContent = "Likes: 123"
+                const internalDivLike = commentFooterDiv.appendChild(document.createElement('div'))
+                const imgElem = internalDivLike.appendChild(document.createElement('img'))
+                imgElem.setAttribute('src', '{% static '/img/like.png' %}')
+                imgElem.setAttribute('class', 'likes')
+                imgElem.setAttribute('type', 'button')
+                imgElem.style.width = '25px;'
+                imgElem.style.height = '25px;'
 
+                const buttonLike = internalDivLike.appendChild(document.createElement('input'))
+                buttonLike.setAttribute('class', 'like_counter')
+                buttonLike.setAttribute('type', 'button')
+
+                imgElem.setAttribute('id', `${data.comment_id}`);
+                buttonLike.setAttribute('id', `${data.comment_id}`);
+                buttonLike.value = "0"
+
+            } else {
+                const likeIndicate = document.querySelector(`input[id="${data.comment_id}"]`)
+                likeIndicate.value = data.likes_count
+            }
         };
 
-
-        chatSocket.onclose = function(e) {
+        chatSocket.onclose = function (e) {
             console.error('Chat socket closed unexpectedly', e);
         };
 
         document.querySelector('#chat-message-input').focus();
-        document.querySelector('#chat-message-input').onkeyup = function(e) {
+        document.querySelector('#chat-message-input').onkeyup = function (e) {
             if (e.keyCode === 13) {
                 document.querySelector('#chat-message-submit').click();
             }
         };
 
-        document.querySelector('#chat-message-submit').onclick = function(e) {
-            console.log(e)
-            console.log({{ post_id }})
+        function addComment() {
+        document.querySelector('#chat-message-submit').addEventListener('click', function (e) {
             const messageInputDom = document.querySelector('#chat-message-input');
             const message = messageInputDom.value;
             if (messageInputDom.value !== "") {
-                console.log("CLICK TO SUBMIT")
                 chatSocket.send(JSON.stringify({
                     'message': message,
                     'username': "{{ request.user.username }}",
-                    'room': {{ post.id }}
+                    'room': "{{ post.id }}"
                 }));
                 messageInputDom.value = '';
+            }}
+        )}
+        addComment()
+
+        function addSocketLike(id) {
+            chatSocket.send(JSON.stringify({
+                'comment_id': id,
+                'username': "{{ request.user.username }}",
+            }));
+        }
+
+        document.addEventListener('click', function (event) {
+            if (event.target.classList.contains('likes')) {
+                addSocketLike(event.target.id)
             }
-        };
+        });
+
     </script>
 
-{% include 'posts/includes/paginator.html' %}
-{% endblock %}
+    {% include 'posts/includes/paginator.html' %}
+    {% endblock %}

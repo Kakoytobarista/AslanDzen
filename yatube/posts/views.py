@@ -83,7 +83,7 @@ def post_detail(request, post_id):
         'post': post,
         'count_posts': count_posts,
         'page_obj': comments,
-        "created": created
+        'created': created,
     }
     return render(request,
                   'posts/post_detail.html',
