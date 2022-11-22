@@ -109,6 +109,8 @@ class WSConsumers(AsyncWebsocketConsumer):
     def add_or_remove_like(self, username, comment_id):
         user = User.objects.get(username=username)
         comment = Comment.objects.get(id=comment_id)
+        print(comment.likes.prefetch_related())
+
         if user in comment.likes.prefetch_related():
             comment.likes.remove(user)
             likes_count = len(comment.likes.all())
