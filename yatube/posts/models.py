@@ -21,7 +21,7 @@ class Post(CreatedModel):
     text = models.TextField(verbose_name="Текст поста",
                             help_text='Это поле для текста '
                                       'поста, оно не имеет ограничений '
-                                      'на количество символов.',)
+                                      'на количество символов.', )
     author = models.ForeignKey(User, on_delete=models.CASCADE,
                                related_name="posts",
                                verbose_name="Автор поста",
@@ -59,9 +59,16 @@ class Comment(models.Model):
     created = models.DateTimeField('Дата создания',
                                    auto_now_add=True,
                                    db_index=True)
+    likes = models.ManyToManyField(User, verbose_name="Лайки",
+                                   related_name='users',
+                                   blank=True
+                                   )
+
+    def get_likes(self):
+        return len(self.likes.prefetch_related())
 
     def __str__(self):
-        return self.text
+        return f"{self.text}, likes: {self.likes}"
 
 
 class Follow(models.Model):

@@ -1,15 +1,17 @@
+from datetime import datetime
+
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 
 from .models import Group, Post, User, Follow
 from .forms import PostForm, CommentForm
 from yatube.settings import PAGINATOR_OBJECTS_PER_PAGE as per_page
-from yatube.settings import PAGINATOR_COMMENT_PER_PAGE as per_page_comment
 
 
 def get_page_object(request, posts):
@@ -37,7 +39,6 @@ def index(request):
     return render(request, template, context)
 
 
-@cache_page(1 * 1)
 def group_posts(request, slug):
     template = 'posts/group_list.html'
     group = get_object_or_404(Group, slug=slug)
@@ -50,7 +51,6 @@ def group_posts(request, slug):
     return render(request, template, context)
 
 
-@cache_page(1 * 1)
 def profile(request, username):
     author = get_object_or_404(User, username=username)
     posts = author.posts.all()
@@ -70,22 +70,20 @@ def profile(request, username):
     return render(request, 'posts/profile.html', context)
 
 
-@cache_page(1 * 1)
 def post_detail(request, post_id):
     form = CommentForm(request.POST or None)
     post = get_object_or_404(Post, id=post_id)
     comments = post.comments.all()
     count_posts = post.author.posts.count()
-    paginator = Paginator(comments, per_page_comment)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    created = datetime.now().strftime("%y-%m-%d, %H:%M")
     context = {
+        "post_id": post_id,
         'form': form,
         'title': post.text[:30],
         'post': post,
         'count_posts': count_posts,
-        'page_obj': page_obj,
-        'paginator': paginator
+        'page_obj': comments,
+        'created': created,
     }
     return render(request,
                   'posts/post_detail.html',

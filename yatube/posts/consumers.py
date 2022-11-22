@@ -36,13 +36,24 @@ class WSConsumers(AsyncWebsocketConsumer):
             self.channel_name
         )
 
-    # Receive message from WebSocket
     async def receive(self, text_data):
         data = json.loads(text_data)
-        print(data)
-        message = data['message']
-        username = data['username']
-        room = data['room']
+        username = data.get('username')
+        if data.get('comment_id'):
+            likes_count = await self.add_or_remove_like(username, data['comment_id'])
+            await self.channel_layer.group_send(
+                self.post_group_name,
+                {
+                    'type': 'like_message',
+                    'username': username,
+                    'comment_id': data.get('comment_id'),
+                    'likes_count': str(likes_count),
+                }
+            )
+            return
+
+        message = data.get('message')
+        room = data.get('room')
 
         comment = await self.save_message(username, room, message)
 
@@ -52,21 +63,39 @@ class WSConsumers(AsyncWebsocketConsumer):
                 'type': 'chat_message',
                 'message': message,
                 'username': username,
-                "created": datetime.datetime.strftime(comment.created, '%a, %d %B, %Y, %X')[:-3]
+                'created': datetime.datetime.strftime(comment.created, '%a, %d %B, %Y, %X')[:-3],
+                'comment_id': comment.id,
             }
         )
 
     async def chat_message(self, event):
-        message = event['message']
-        username = event['username']
-        created = event['created']
+        comment_id = event.get('comment_id')
+        username = event.get('username')
 
-        # Send message to WebSocket
+        message = event.get('message')
+        created = event.get('created')
+        type_ = event.get('type')
+
         await self.send(text_data=json.dumps({
             'message': message,
             'username': username,
             'created': created,
+            'comment_id': comment_id,
+            'type': type_
         }))
+
+    async def like_message(self, event):
+        username = event.get('username')
+        type_ = event.get('type')
+        comment_id = event.get('comment_id')
+        likes_count = event.get('likes_count')
+
+        await self.send(text_data=json.dumps({
+            'type': type_,
+            'username': username,
+            'comment_id': comment_id,
+            'likes_count': likes_count
+            }))
 
     @sync_to_async
     def save_message(self, username, room, message):
@@ -74,5 +103,17 @@ class WSConsumers(AsyncWebsocketConsumer):
         room = Post.objects.get(id=room)
 
         comment = Comment.objects.create(author=user, post_id=room.id, text=message)
-        self.disconnect(close_code=200)
         return comment
+
+    @sync_to_async
+    def add_or_remove_like(self, username, comment_id):
+        user = User.objects.get(username=username)
+        comment = Comment.objects.get(id=comment_id)
+        if user in comment.likes.prefetch_related():
+            comment.likes.remove(user)
+            likes_count = len(comment.likes.all())
+            return likes_count
+
+        comment.likes.add(user)
+        likes_count = len(comment.likes.all())
+        return likes_count

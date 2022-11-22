@@ -21,10 +21,6 @@ body {
 }
 
 
-.navbar-brand {
-    padding-left: 30px;
-}
-
 #follow_btn {
     margin-top: 20px;
 }
@@ -37,9 +33,21 @@ body {
     margin: 5px;
 }
 
+#up_block_post {
+    margin-right: 20px;
+}
+
+
 
 /*Comment block*/
 
+/**,*/
+/**::before,*/
+/**::after {*/
+/*  margin: 0;*/
+/*  padding: 0;*/
+/*  box-sizing: border-box;*/
+/*}*/
 
 .container_comment {
   width: min(50%, 900px);
@@ -106,4 +114,18 @@ body {
 #date {
   float: right;
   font-size: 15px;
+}
+
+
+/*Image css*/
+
+.like_counter {
+  border: 0!important;
+  border-radius: 0!important;
+  background-color: white;
+}
+
+.likes {
+  height: 25px;
+  width: 25px;
 }
