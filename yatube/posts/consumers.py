@@ -114,6 +114,6 @@ class WSConsumers(AsyncWebsocketConsumer):
             likes_count = len(comment.likes.all())
             return likes_count
 
-        comment.likes.create(user.username)
+        comment.likes.add(user)
         likes_count = len(comment.likes.all())
         return likes_count
