@@ -101,16 +101,18 @@ body {
 }
 
 #date {
-  float: right !important;
   font-size: 15px;
+  position: absolute;
+  right: 20px;
+  top: auto;
 }
 
 
 /*Image css*/
 
 .like_counter {
-  border: 0!important;
-  border-radius: 0!important;
+  border: 0 !important;
+  border-radius: 0 !important;
   background-color: white;
 }
 
