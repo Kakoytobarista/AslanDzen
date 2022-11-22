@@ -7,7 +7,9 @@ RUN pip3 install -r requirements.txt
 RUN pip3 install --upgrade attrs
 COPY /yatube .
 CMD [ "sh", "-c", \
-"python3 manage.py migrate \
+"python3 manage.py makemigrations \
+&& \
+python3 manage.py migrate \
 && \
 python3 manage.py shell \
 && \
