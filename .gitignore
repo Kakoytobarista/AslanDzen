@@ -151,3 +151,5 @@ yatube/posts/static/admin
 yatube/media/
 
 cert
+
+yatube/posts/migrations
