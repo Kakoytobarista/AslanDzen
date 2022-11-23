@@ -100,7 +100,7 @@ class WSConsumers(AsyncWebsocketConsumer):
     @sync_to_async
     def save_message(self, username, room, message):
         user = get_object_or_404(User, username=username)
-        room = get_object_or_404(User, id=room)
+        room = get_object_or_404(Post, id=room)
 
         comment = Comment.objects.create(author=user, post_id=room.id, text=message)
         return comment
