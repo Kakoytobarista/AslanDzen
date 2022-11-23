@@ -4,7 +4,7 @@ import json
 
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
-
+from django.shortcuts import get_object_or_404
 
 from posts.models import Post, Comment
 
@@ -99,21 +99,21 @@ class WSConsumers(AsyncWebsocketConsumer):
 
     @sync_to_async
     def save_message(self, username, room, message):
-        user = User.objects.get(username=username)
-        room = Post.objects.get(id=room)
+        user = get_object_or_404(User, username=username)
+        room = get_object_or_404(User, id=room)
 
         comment = Comment.objects.create(author=user, post_id=room.id, text=message)
         return comment
 
     @sync_to_async
     def add_or_remove_like(self, username, comment_id):
-        user = User.objects.get(username=username)
-        comment = Comment.objects.get(id=comment_id)
-        if user in comment.likes.prefetch_related():
+        user = get_object_or_404(User, username=username)
+        comment = get_object_or_404(Comment, id=comment_id)
+        if comment.likes.prefetch_related().filter(id=user.id).exists():
             comment.likes.remove(user)
-            likes_count = len(comment.likes.all())
+            likes_count = comment.likes.all().count()
             return likes_count
 
         comment.likes.add(user)
-        likes_count = len(comment.likes.all())
+        likes_count = comment.likes.all().count()
         return likes_count
