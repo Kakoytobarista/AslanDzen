@@ -1,17 +1,16 @@
 from datetime import datetime
 
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-from django.shortcuts import render, get_object_or_404
-from django.core.paginator import Paginator
-from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
+from django.core.paginator import Paginator
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.views.decorators.cache import cache_page
 
-from .models import Group, Post, User, Follow
-from .forms import PostForm, CommentForm
 from yatube.settings import PAGINATOR_OBJECTS_PER_PAGE as per_page
+
+from .forms import CommentForm, PostForm
+from .models import Follow, Group, Post, User
 
 
 def get_page_object(request, posts):
@@ -59,7 +58,6 @@ def profile(request, username):
         'page_obj': page_obj,
         'author': author,
         'count_posts': posts.count(),
-        'title': f'Профайл пользователя {author}',
         'following': False
     }
     if request.user.is_authenticated:
@@ -133,7 +131,7 @@ def post_edit(request, post_id):
 def post_delete(request, post_id):
     users_post = get_object_or_404(Post, id=post_id)
     if request.user == users_post.author:
-        post_to_delete = Post.objects.get(id=post_id)
+        post_to_delete = get_object_or_404(Post, id=post_id)
         post_to_delete.delete()
     return HttpResponseRedirect(reverse("posts:index"))
 
