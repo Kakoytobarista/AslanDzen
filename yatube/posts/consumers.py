@@ -1,25 +1,30 @@
 import datetime
-
 import json
+from typing import Union
 
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
+from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 
-from posts.models import Post, Comment
-
-from django.contrib.auth.models import User
+from posts.models import Comment, Post
 
 
 class WSConsumers(AsyncWebsocketConsumer):
+    """
+    Async Object for initialization and handling websocket data
+    """
     author = None
 
     def __init__(self, *args, **kwargs):
         super().__init__(args, kwargs)
-        self.post_id = None
-        self.post_group_name = None
+        self.post_id: Union[int, None] = None
+        self.post_group_name: Union[str, None] = None
 
-    async def connect(self):
+    async def connect(self) -> None:
+        """
+        Async Method for connect to WebSocket connection
+        """
         self.post_id = self.scope['url_route']['kwargs']['post_id']
         self.post_group_name = 'posts_%s' % self.post_id
 
@@ -30,13 +35,19 @@ class WSConsumers(AsyncWebsocketConsumer):
 
         await self.accept()
 
-    async def disconnect(self, close_code):
+    async def disconnect(self, close_code) -> None:
+        """
+        Async method for disconnect from WebSocket connections
+        """
         await self.channel_layer.group_discard(
             self.post_group_name,
             self.channel_name
         )
 
-    async def receive(self, text_data):
+    async def receive(self, text_data: json) -> None:
+        """
+        Async method for handling receive data and handling it
+        """
         data = json.loads(text_data)
         username = data.get('username')
         if data.get('comment_id'):
@@ -68,7 +79,11 @@ class WSConsumers(AsyncWebsocketConsumer):
             }
         )
 
-    async def chat_message(self, event):
+    async def chat_message(self, event: json) -> None:
+        """
+        Async Method for getting and data
+        into the Frontend (with create comment)
+        """
         comment_id = event.get('comment_id')
         username = event.get('username')
 
@@ -84,7 +99,11 @@ class WSConsumers(AsyncWebsocketConsumer):
             'type': type_
         }))
 
-    async def like_message(self, event):
+    async def like_message(self, event: json) -> None:
+        """
+        Async Method for getting and data  into
+        the Frontend (with like message)
+        """
         username = event.get('username')
         type_ = event.get('type')
         comment_id = event.get('comment_id')
@@ -98,15 +117,25 @@ class WSConsumers(AsyncWebsocketConsumer):
             }))
 
     @sync_to_async
-    def save_message(self, username, room, message):
+    def save_message(self, username: str,
+                     room: id, message: str) -> Comment:
+        """
+        Async Method for save comment into DB
+        """
         user = get_object_or_404(User, username=username)
         room = get_object_or_404(Post, id=room)
 
-        comment = Comment.objects.create(author=user, post_id=room.id, text=message)
+        comment = Comment.objects.create(author=user, post_id=room.id,
+                                         text=message)
         return comment
 
     @sync_to_async
-    def add_or_remove_like(self, username, comment_id):
+    def add_or_remove_like(self, username: str,
+                           comment_id: int) -> int:
+        """
+        Async method for add or remove like from
+        comment into DB
+        """
         user = get_object_or_404(User, username=username)
         comment = get_object_or_404(Comment, id=comment_id)
         if comment.likes.prefetch_related().filter(id=user.id).exists():

@@ -65,7 +65,7 @@ class Comment(models.Model):
                                    )
 
     def get_likes(self):
-        return len(self.likes.prefetch_related())
+        return self.likes.prefetch_related().count()
 
     def __str__(self):
         return f"{self.text}, likes: {self.likes}"
