@@ -3,8 +3,8 @@
 {% block content %}
 <div class="col-md-8 p-5">
   <div class="container">
-    <h1>{{ title }}</h1>
-    <p>{{ title.description }}</p>
+    <h1>{{ group }}</h1>
+    <p>{{ group.description }}</p>
     {% for post in page_obj %}
     {% include 'posts/includes/post_list.html' %}
       <hr>
