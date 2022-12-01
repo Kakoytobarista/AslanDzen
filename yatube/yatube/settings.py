@@ -131,4 +131,4 @@ EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 
 PAGINATOR_OBJECTS_PER_PAGE = 10
-PAGINATOR_COMMENT_PER_PAGE = 3
+PAGINATOR_COMMENT_PER_PAGE = 10
