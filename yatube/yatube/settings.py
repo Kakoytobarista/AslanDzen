@@ -14,6 +14,7 @@ if DEBUG is False:
         '127.0.0.1',
         '[::1]',
         'testserver',
+        '*',
     ]
 
 if DEBUG is True:
@@ -122,7 +123,7 @@ LOGIN_URL = 'users:login'
 LOGIN_REDIRECT_URL = 'posts:index'
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
