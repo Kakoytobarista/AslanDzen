@@ -1,32 +1,41 @@
 {% extends "base.html" %}
+
 {% block title %}
     About Author
 {% endblock %}
+
 {% block content %}
     <div class="container py-5">
-        <h1>Gurbanov Aslan</h1>
-        <h2>Backend developer/ Software Engineer in Test</h2>
-        <br/>
-        <p>
-            <smal>For the past few years, I have been involved in the development
-            of automated tests as a Software engineer in test. I am well versed
-            in UI automation, API, which helps me to show good results in all directions.
-            In view of experience, I often help colleagues in thinking through the architecture
-            of autotests or their implementation. I independently lead projects with autotests
-            from creating a repository and working out the architecture to containerization
-            and integration into CI / CD. I managed to work in the field of information security and mobility
-            aggregation.
+        <div class="text-center">
+            <h1 class="display-4">Gurbanov Aslan</h1>
+            <h2 class="lead">Backend Developer / Software Engineer in Test</h2>
+        </div>
+        <hr class="my-4">
 
-            How I started working as a software engineer in test almost from
-            the first day I studied backend development. Half a year after
-            the start of training and passing several small courses in the direction
-            of python developer, I signed up for a course from Yandex Praktikum in
-            the direction of python developer, where I studied backend for a year and
-            wrote several good pet projects. Then I started to hone my skills doing freelance
-            development (I wrote web applications for online stores, barbershops, etc.).
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <p class="text-justify">
+                    <small class="d-block text-center">
+                        For the past few years, I have been deeply involved in the development
+                        of automated tests as a Software Engineer in Test. My expertise spans UI automation,
+                        API testing, and more, enabling me to excel in various testing domains. Leveraging
+                        my experience, I often assist colleagues in designing test architectures and
+                        implementing robust solutions. I independently lead projects, starting from creating
+                        repositories and defining architectures to containerization and integration into CI/CD.
+                        I've also worked in the fields of information security and mobility aggregation.
 
-            At the moment, I want to start developing product code already within the team
-                and continue to improve my skills as a backend developer already within the company.</smal>
-        </p>
+                        My journey into software engineering began with backend development. Within the first
+                        six months of studying and completing various courses in Python development, I enrolled
+                        in a Python developer course at Yandex Praktikum, where I focused on backend development
+                        for a year and successfully completed several noteworthy projects. Subsequently, I honed
+                        my skills through freelance development, creating web applications for online stores,
+                        barbershops, and more.
+
+                        Currently, I am eager to contribute to product code development within a collaborative
+                        team environment and further enhance my backend development skills within a reputable company.
+                    </small>
+                </p>
+            </div>
+        </div>
     </div>
 {% endblock %}

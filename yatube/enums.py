@@ -1,5 +1,7 @@
 from enum import Enum
 
+from posts.decorators import extend_enum
+
 
 class AboutPage(Enum):
     AUTHOR = 'about/author.html'
@@ -28,20 +30,23 @@ class BASE_MODEL_ENUM(Enum):
     PUB_DATE = 'pub_date'
 
 
-class UserModelEnum(BASE_MODEL_ENUM):
+@extend_enum(BASE_MODEL_ENUM)
+class UserModelEnum(Enum):
     FIRST_NAME = 'first_name'
     LAST_NAME = 'last_name'
     USERNAME = 'username'
     EMAIL = 'email'
 
 
-class GroupModelEnum(BASE_MODEL_ENUM):
+@extend_enum(BASE_MODEL_ENUM)
+class GroupModelEnum(Enum):
     DESCRIPTION = 'description'
     TITLE = 'title'
     SLUG = 'slug'
 
 
-class PostModelEnum(BASE_MODEL_ENUM):
+@extend_enum(BASE_MODEL_ENUM)
+class PostModelEnum(Enum):
     TEXT = 'text'
     AUTHOR = 'author'
     GROUP = 'group'

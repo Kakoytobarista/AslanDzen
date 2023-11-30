@@ -148,7 +148,6 @@ hw05_final/.idea
 
 # папки со статикой и медиа
 yatube/posts/static/admin
-yatube/media/
 
 
 yatube/posts/migrations

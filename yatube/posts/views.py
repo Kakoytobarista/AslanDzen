@@ -14,7 +14,7 @@ from .utils import get_users
 class IndexView(ListView):
     model = Post
     template_name = HtmlPathEnum.INDEX_PAGE.value
-    paginate_by = 10
+    paginate_by = 5
 
 
 class GroupView(ListView):

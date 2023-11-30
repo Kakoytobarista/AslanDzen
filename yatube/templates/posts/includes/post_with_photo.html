@@ -11,5 +11,5 @@
        <a href="{% url 'posts:post_detail' post.id %}"> <img class="card-img my-2" src="{% static  'img/img.png' %}"></a>
 {% endif %}
 <p>
-  {{ post.text|truncatewords:28 }}
+  {{ post.text }}
 </p>
