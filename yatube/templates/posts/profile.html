@@ -2,21 +2,21 @@
 {% block content %}
 <div class="container py-5">
   <div class="mb-5">
-  <h1>Все посты пользователя {{ author.get_full_name }}</h1>
-  <h3>Всего постов: {{ count_posts }}</h3>
+    <h1>All posts by user {{ author.get_full_name }}</h1>
+    <h3>Total posts: {{ count_posts }}</h3>
     {% if request.user != author %}
         {% if following %}
         <a id="follow_btn" class="btn btn-lg btn-light"
           href="{% url 'posts:profile_unfollow' author.username %}" role="button">
-          Отписаться
+          Unfollow
         </a>
         {% elif not following %}
           <a id="follow_btn" class="btn btn-lg btn-primary"
             href="{% url 'posts:profile_follow' author.username %}" role="button">
-            Подписаться
+            Follow
           </a>
         {% else %}
-      <p>Тут должна быть кнопка</p>
+      <p>Button should be here</p>
    {% endif %}
   {% endif %}
   </div>
@@ -25,11 +25,11 @@
   {% for post in page_obj %}
   {% if post.group %}
       <li id="posts_list" class="list-group-item border-0 ">
-  Группа: <a class="btn btn-light" href="{% url 'posts:group_list' post.group.slug %}">{{ post.group.slug|upper }}</a>
+  Group: <a class="btn btn-light" href="{% url 'posts:group_list' post.group.slug %}">{{ post.group.slug|upper }}</a>
   {% endif %}
             </li>
       <li class="list-group-item">
-          Дата публикации: {{ post.pub_date|date:"d E Y" }}
+          Publication Date: {{ post.pub_date|date:"d E Y" }}
       </li>
   {% include 'posts/includes/post_with_photo.html' %}
   <hr>

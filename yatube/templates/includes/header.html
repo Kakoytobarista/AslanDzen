@@ -14,33 +14,33 @@
       {% with request.resolver_match.view_name as view_name %}
         <li class="nav-item"> 
           <a class="nav-link {% if view_name  == 'about:author' %}active{% endif %}"
-              href="{% url 'about:author' %}">Об авторе</a>
+              href="{% url 'about:author' %}">About Author</a>
         </li>
         <li class="nav-item">
           <a class="nav-link {% if view_name == 'about:tech' %}active{% endif %}"
-              href="{% url 'about:tech' %}">Технологии</a>
+              href="{% url 'about:tech' %}">Technologies</a>
         </li>
         {% if user.is_authenticated %}
         <li class="nav-item">
           <a class="nav-link {% if view_name == 'posts:post_create' %}active{% endif %}"
-              href="{% url 'posts:post_create' %}">Новая запись</a>
+              href="{% url 'posts:post_create' %}">New Post</a>
         </li>
         <li class="nav-item">
         <a class="nav-link {% if view_name == 'users:password_change_form' %}active{% endif %}"
-              href="{% url 'users:password_change_form' %}">Изменить пароль</a>
+              href="{% url 'users:password_change_form' %}">Change Password</a>
         </li>
         <li class="nav-item"> 
-          <a class="nav-link link-light" href="{% url 'users:logout' %}">Выйти</a>
+          <a class="nav-link link-light" href="{% url 'users:logout' %}">Sign out</a>
         </li>
         <li>
-          Пользователь: {{ user.username }}
+          User: {{ user.username }}
         <li>
         {% else %}
         <li class="nav-item"> 
-          <a class="nav-link link-light" href="{% url 'users:login' %}">Войти</a>
+          <a class="nav-link link-light" href="{% url 'users:login' %}">Sign In</a>
         </li>
         <li class="nav-item"> 
-          <a class="nav-link link-light" href="{% url 'users:signup' %}">Регистрация</a>
+          <a class="nav-link link-light" href="{% url 'users:signup' %}">Sign Up</a>
         </li>
         {% endif %}
         {% endwith %} 

@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from enums import HtmlPathEnum
 from .models import Group, Post, User, Follow
 from .forms import PostForm, CommentForm
 from .utils import get_users
@@ -12,12 +13,12 @@ from .utils import get_users
 
 class IndexView(ListView):
     model = Post
-    template_name = 'posts/index.html'
+    template_name = HtmlPathEnum.INDEX_PAGE.value
     paginate_by = 10
 
 
 class GroupView(ListView):
-    template_name = 'posts/group_list.html'
+    template_name = HtmlPathEnum.GROUP_PAGE.value
     paginate_by = 10
 
     def get_context_data(self, **kwargs):
@@ -33,7 +34,7 @@ class GroupView(ListView):
 
 class ProfileView(ListView):
     model = Post
-    template_name = 'posts/profile.html'
+    template_name = HtmlPathEnum.PROFILE_PAGE.value
     paginate_by = 10
 
     def get_context_data(self, **kwargs):
@@ -53,7 +54,7 @@ class ProfileView(ListView):
 
 
 class PostDetailView(DetailView):
-    template_name = 'posts/post_detail.html'
+    template_name = HtmlPathEnum.POST_DETAIL_PAGE.value
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -72,7 +73,7 @@ class PostDetailView(DetailView):
 
 class PostCreateView(CreateView, LoginRequiredMixin):
     model = Post
-    template_name = 'posts/create_post.html'
+    template_name = HtmlPathEnum.POST_CREATE_EDIT_PAGE.value
     form_class = PostForm
 
     def get_success_url(self):
@@ -87,7 +88,7 @@ class PostCreateView(CreateView, LoginRequiredMixin):
 
 class PostEditView(UpdateView, LoginRequiredMixin):
     model = Post
-    template_name = 'posts/create_post.html'
+    template_name = HtmlPathEnum.POST_CREATE_EDIT_PAGE.value
     pk_url_kwarg = 'post_id'
     fields = '__all__'
 
@@ -126,7 +127,7 @@ class CommentView(CreateView, LoginRequiredMixin):
 
 class FollowIndexView(ListView, LoginRequiredMixin):
     model = Post
-    template_name = 'posts/follow.html'
+    template_name = HtmlPathEnum.FOLLOW_PAGE.value
     paginate_by = 10
 
     def get_queryset(self):

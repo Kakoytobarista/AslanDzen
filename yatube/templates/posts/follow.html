@@ -3,16 +3,16 @@
 {% block content %}
 <div class="col-md-8 p-5">
   <div class="container">
-    <h1 style>Посты подписок пользователей</h1>
+    <h1 style>User Subscription Posts</h1>
     {% include 'posts/includes/switcher.html' %}
     {% cache 20 index_page %}
     {% for post in page_obj %}
     {% include 'posts/includes/post_list.html' %}
     {% if post.group %}
-    <a href="{% url 'posts:group_list' post.group.slug %}">Все записи группы</a>
+    <a href="{% url 'posts:group_list' post.group.slug %}">All Group Posts</a>
     <br>
     {% endif %}
-    <a href="{% url 'posts:post_detail' post.id %}">Подробная информация</a>
+    <a href="{% url 'posts:post_detail' post.id %}">More...</a>
         <hr>
     {% endfor %}
   {%  endcache %}

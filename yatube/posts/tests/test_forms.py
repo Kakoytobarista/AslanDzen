@@ -23,21 +23,21 @@ class PostFieldsTest(TestCase):
         super().setUpClass()
         cls.form = PostForm()
 
-    def test_fields_present(self):
-        """Проверка на наличие полей формы PostForm"""
+    def test_fields_present(self) -> None:
+        """Test whether the fields 'text' and 'group' are present in PostForm."""
         fields = PostFieldsTest.form.fields
         self.assertTrue(fields, ('text', 'group'))
 
-    def test_title_help_text(self):
-        """Проверка на корректные help_text полей"""
+    def test_title_help_text(self) -> None:
+        """Test whether the help_text for fields is correct."""
         help_text_group = PostFieldsTest.form.fields['group'].help_text
         help_text_for_text = PostFieldsTest.form.fields['text'].help_text
-        self.assertEqual(help_text_group, ('Это поле выбора группы поста, '
-                                           'оно необязательное.'))
+        self.assertEqual(help_text_group, ('This is the field for choosing the post group, '
+                                           'it is optional.'))
         self.assertEqual(help_text_for_text,
-                         ('Это поле для текста '
-                          'поста, оно не имеет ограничений '
-                          'на количество символов.'))
+                         ('This is the field for the text '
+                          'of the post, it has no restrictions '
+                          'on the number of characters.'))
 
 
 @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
@@ -64,7 +64,7 @@ class PostCreateFormTests(TestCase):
         super().tearDownClass()
         shutil.rmtree(TEMP_MEDIA_ROOT, ignore_errors=True)
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.guest_user = Client()
 
         self.authorized_client = Client()
@@ -73,8 +73,8 @@ class PostCreateFormTests(TestCase):
         self.another_auth_client = Client()
         self.another_auth_client.force_login(self.another_user)
 
-    def test_create_post(self):
-        """Проверка на корректное создание Post объекта"""
+    def test_create_post(self) -> None:
+        """Test the correct creation of a Post object."""
         small_gif = (
             b'\x47\x49\x46\x38\x39\x61\x02\x00'
             b'\x01\x00\x80\x00\x00\x00\x00\x00'
@@ -107,9 +107,8 @@ class PostCreateFormTests(TestCase):
                          form_data['author'].get_username())
         self.assertTrue(created_post.image, form_data['image'])
 
-    def test_edit_post(self):
-        """Проверка на возможность изменения поста через
-        форму PostForm у reverse('posts:update_pos')"""
+    def test_edit_post(self) -> None:
+        """Test the ability to edit a post using the PostForm at reverse('posts:update_pos')."""
         form_data = {
             'text': 'its new test text',
         }
@@ -125,9 +124,8 @@ class PostCreateFormTests(TestCase):
         self.assertEqual(post.author.get_username(),
                          self.user.get_username())
 
-    def test_un_auth_user_cant_create_post(self):
-        """Проверка на то что неавторизованный пользователь
-         не может создать пост"""
+    def test_un_auth_user_cant_create_post(self) -> None:
+        """Test that an unauthorized user cannot create a post."""
         form_data = {
             'text': 'its test text',
             'author': self.user,
@@ -140,9 +138,8 @@ class PostCreateFormTests(TestCase):
             response_guest,
             reverse('users:login') + '?next=' + reverse('posts:post_create'))
 
-    def test_add_comment_can_only_auth_user(self):
-        """Тест на проверку того что комментарии
-        может оставлять только авторизованный пользователь"""
+    def test_add_comment_can_only_auth_user(self) -> None:
+        """Test that only an authorized user can leave comments."""
         form_data = {
             'text': 'test mongol',
             'author': self.user
@@ -159,9 +156,8 @@ class PostCreateFormTests(TestCase):
                                      args=[self.post.id]))
         self.assertEqual(comment.text, form_data['text'])
 
-    def test_cash_on_index_page_working(self):
-        """Тест на проверку работы кэша
-        постов на странице index"""
+    def test_cash_on_index_page_working(self) -> None:
+        """Test whether the cache of posts on the index page is working."""
         form_data = {
             'text': 'cash_text',
             'author': self.user

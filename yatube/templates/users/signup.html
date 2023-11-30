@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% block title %}Зарегистрироваться{% endblock %}
+{% block title %}Sign up{% endblock %}
 {% block content %}
-{% with card_header='Зарегистрироваться' %}
+{% with card_header='Sign up' %}
 {% include 'users/includes/header_card.html' %}
   {% endwith %}
       {% load user_filters %}
@@ -48,7 +48,7 @@
           {% endfor %}
           <div class="text-center">
             <button type="submit" class="btn btn-primary">
-              Зарегистрироваться
+              Sign up
             </button>
           </div>
         </form>

@@ -19,9 +19,15 @@ TEMP_MEDIA_ROOT = tempfile.mkdtemp(dir=settings.BASE_DIR)
 
 @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
 class PostsViewsTests(TestCase):
+    """
+    Test cases for the views related to posts in the application.
+    """
 
     @classmethod
     def setUpClass(cls):
+        """
+        Set up test data for the test class.
+        """
         super().setUpClass()
         cls.user = User.objects.create_user(username='tester')
         cls.group = Group.objects.create(title='google',
@@ -51,60 +57,61 @@ class PostsViewsTests(TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        """
+        Clean up after the test class.
+        """
         super().tearDownClass()
         shutil.rmtree(TEMP_MEDIA_ROOT, ignore_errors=True)
 
     def setUp(self) -> None:
+        """
+        Set up test data for each test method.
+        """
         self.guest_user = Client()
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)
 
     def test_post_with_set_group_present_to_pages(self):
-        """Проверка наличия поста с установленной группой на страницах
-        index, group_list, profile"""
+        """
+        Test that a post with a set group is present on index, group_list, and profile pages.
+        """
         templates_urls = {
             reverse('posts:index'): self.post,
             reverse('posts:group_list', args=[self.group.slug]): self.post,
             reverse('posts:profile', args=[self.user]): self.post
         }
 
-        for adress, template in templates_urls.items():
-            with self.subTest(adress=adress):
-                response = self.authorized_client.get(
-                    adress).context.get('page_obj').object_list
+        for address, template in templates_urls.items():
+            with self.subTest(address=address):
+                response = self.authorized_client.get(address).context.get('page_obj').object_list
                 self.assertIn(template, response)
 
     def test_post_with_set_group_not_present_wrong_group_page(self):
-        """Проверка на отсутствие поста без установленной группы
-        на странице group_list"""
-        adress = reverse('posts:group_list', args=[self.second_group.slug])
-        response = self.authorized_client.get(adress).context.get(
-            'page_obj').object_list
+        """
+        Test that a post without a set group is not present on the wrong group_list page.
+        """
+        address = reverse('posts:group_list', args=[self.second_group.slug])
+        response = self.authorized_client.get(address).context.get('page_obj').object_list
 
         self.assertNotIn(self.post, response)
 
     def test_views_use_correct_template_with_guest_user(self):
-        """Проверка на корректный рендеринг страниц
-        для неавторизованных пользователей."""
-
+        """
+        Test that views render the correct template for guest users.
+        """
         templates_url_names = {
             'posts/index.html': reverse('posts:index'),
-            'posts/group_list.html': reverse('posts:group_list',
-                                             args=[self.group.slug]),
-            'posts/profile.html': reverse('posts:profile',
-                                          args=[self.user]),
-            'posts/post_detail.html': reverse('posts:post_detail',
-                                              args=[self.post.id]),
+            'posts/group_list.html': reverse('posts:group_list', args=[self.group.slug]),
+            'posts/profile.html': reverse('posts:profile', args=[self.user]),
+            'posts/post_detail.html': reverse('posts:post_detail', args=[self.post.id]),
         }
-        for template, adress in templates_url_names.items():
-            with self.subTest(adress=adress):
-                response = self.guest_user.get(adress)
+        for template, address in templates_url_names.items():
+            with self.subTest(address=address):
+                response = self.guest_user.get(address)
                 self.assertTemplateUsed(response, template)
 
     def test_views_use_correct_template_with_auth_user(self):
-        """Проверка на корректный рендеринг страниц
-        для авторизованных пользователей."""
-
+        """Test that views use the correct template for authenticated users."""
         templates_url_names = {
             'posts/create_post.html': [reverse("posts:post_create"),
                                        reverse("posts:update_post",
@@ -121,8 +128,7 @@ class PostsViewsTests(TestCase):
                                 'posts/create_post.html')
 
     def test_create_post_page_show_correct_context(self):
-        """Проверка на то что шаблон create_post
-         сформирован с правильным контекстом."""
+        """Test that the create_post template is formed with the correct context."""
         response = self.authorized_client.get(reverse('posts:post_create'))
         form_fields = {
             'text': forms.fields.CharField,
@@ -135,7 +141,7 @@ class PostsViewsTests(TestCase):
                 self.assertIsInstance(form_field, expected)
 
     def test_update_post_page_show_correct_context(self):
-        """Шаблон update_post сформирован с правильным контекстом."""
+        """Test that the update_post template is formed with the correct context."""
         response = self.authorized_client.get(reverse('posts:update_post',
                                                       args=[self.post.id]))
         form_fields = {
@@ -149,8 +155,7 @@ class PostsViewsTests(TestCase):
                 self.assertIsInstance(form_field, expected)
 
     def test_posts_index_page_show_correct_context(self):
-        """Проверка на то что шаблон posts:index сформирован
-         с правильным контекстом."""
+        """Test that the posts:index template is formed with the correct context."""
         response = self.authorized_client.get(reverse('posts:index'))
         title = response.context['title']
         self.assertEqual(title, 'Главная страница')
@@ -164,8 +169,7 @@ class PostsViewsTests(TestCase):
             self.assertEqual(post.image, self.post.image)
 
     def test_group_page_show_correct_context(self):
-        """Проверка на то что Шаблон posts:group_list
-         сформирован с правильным контекстом."""
+        """Test that the posts:group_list template is formed with the correct context."""
         response = self.authorized_client.get(reverse('posts:group_list',
                                                       args=[self.group.slug]))
         title = response.context['title']
@@ -181,7 +185,7 @@ class PostsViewsTests(TestCase):
             self.assertEqual(post.image, self.post.image)
 
     def test_profile_page_show_correct_context(self):
-        """Шаблон posts:profile сформирован с правильным контекстом."""
+        """Test that the posts:profile template is formed with the correct context."""
         response = self.authorized_client.get(reverse('posts:profile',
                                                       args=[self.user]))
         title = response.context['title']
@@ -201,8 +205,7 @@ class PostsViewsTests(TestCase):
             self.assertEqual(post.image, self.post.image)
 
     def test_post_detail_page_show_correct_context(self):
-        """Проверка на то что Шаблон post_detail сформирован
-         с правильным контекстом."""
+        """Test that the post_detail template is formed with the correct context."""
         response = self.authorized_client.get(reverse('posts:post_detail',
                                                       args=[self.post.id]))
         post_context = response.context['post']
@@ -218,57 +221,44 @@ class PostsViewsTests(TestCase):
         self.assertEqual(post_context.image, self.post.image)
 
     def test_post_detail_page_show_correct_form_context(self):
-        """Проверка на корректное появление формы
-        контекста на странице post detail"""
+        """Test that the post_detail template correctly displays the form context."""
         response = self.authorized_client.get(reverse('posts:post_detail',
                                                       args=[self.post.id]))
         form_context = response.context['form']
         self.assertTrue(form_context)
 
-
 class PaginatorViewsTest(TestCase):
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
+        """Set up data for PaginatorViewsTest"""
         super().setUpClass()
         cls.user = User.objects.create_user('tester2')
-        cls.group = Group.objects.create(title='google',
-                                         slug='google',
-                                         description='its google dude')
-        factories.PostFactory.create_batch(13,
-                                           author=cls.user,
-                                           group=cls.group
-                                           )
+        cls.group = Group.objects.create(title='google', slug='google', description='its google dude')
+        factories.PostFactory.create_batch(13, author=cls.user, group=cls.group)
 
     def setUp(self) -> None:
+        """Set up the authorized client for testing"""
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)
 
-    def test_views_contains_ten_records(self):
-        """Проверка Пагинатора на отображение 10 постов
-        на первой странице"""
+    def test_views_contains_ten_records(self) -> None:
+        """Test whether views contain ten records on the first page"""
         templates_urls = {
-            self.client.get(reverse('posts:group_list',
-                                    args=[self.group.slug])): 10,
+            self.client.get(reverse('posts:group_list', args=[self.group.slug])): 10,
             self.client.get(reverse('posts:index')): 10,
-            self.client.get(reverse('posts:profile',
-                                    args=[self.user])): 10
-
+            self.client.get(reverse('posts:profile', args=[self.user])): 10
         }
         for value, expected in templates_urls.items():
             with self.subTest(value=value):
                 form_field = value.context['page_obj']
                 self.assertEqual(len(form_field), expected)
 
-    def test_views_contains_three_records(self):
-        """Проверка Пагинатора на отображжение 3-ех постов
-        (оставшихся) на второй странице"""
+    def test_views_contains_three_records(self) -> None:
+        """Test whether views contain three records on the second page"""
         templates_urls = {
-            self.client.get(reverse('posts:group_list',
-                                    args=[self.group.slug]) + '?page=2'): 3,
+            self.client.get(reverse('posts:group_list', args=[self.group.slug]) + '?page=2'): 3,
             self.client.get(reverse('posts:index') + '?page=2'): 3,
-            self.client.get(reverse('posts:profile',
-                                    args=[self.user]) + '?page=2'): 3
-
+            self.client.get(reverse('posts:profile', args=[self.user]) + '?page=2'): 3
         }
         for value, expected in templates_urls.items():
             with self.subTest(value=value):
@@ -278,7 +268,8 @@ class PaginatorViewsTest(TestCase):
 
 class FollowViewsTest(TestCase):
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
+        """Set up data for FollowViewsTest"""
         super().setUpClass()
         cls.user = User.objects.create_superuser(username='form_tester',
                                                  email='mail@mail.ru',
@@ -286,71 +277,48 @@ class FollowViewsTest(TestCase):
         cls.another_user = User.objects.create_user(username='another_user',
                                                     email='another@mail.ru',
                                                     password='qwe123!@#')
-        cls.group = Group.objects.create(title='mail',
-                                         slug='mail',
-                                         description='just a mail')
-        cls.post = Post.objects.create(text='its test text in setup',
-                                       author=cls.user,
-                                       group=cls.group
-                                       )
+        cls.group = Group.objects.create(title='mail', slug='mail', description='just a mail')
+        cls.post = Post.objects.create(text='its test text in setup', author=cls.user, group=cls.group)
 
     @classmethod
-    def tearDownClass(cls):
+    def tearDownClass(cls) -> None:
+        """Clean up after FollowViewsTest"""
         super().tearDownClass()
         shutil.rmtree(TEMP_MEDIA_ROOT, ignore_errors=True)
 
-    def setUp(self):
+    def setUp(self) -> None:
+        """Set up clients for testing"""
         self.guest_user = Client()
-
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)
-
         self.another_auth_client = Client()
         self.another_auth_client.force_login(self.another_user)
 
-    def test_following_posts_present_at_follow_page(self):
-        """Посты авторов на которых подписался пользователь
-        присутствуют на странице follow"""
-        response_content = self.another_auth_client.get(
-            reverse('posts:follow_index')).content
+    def test_following_posts_present_at_follow_page(self) -> None:
+        """Test whether posts from followed authors are present on the follow page"""
+        response_content = self.another_auth_client.get(reverse('posts:follow_index')).content
         self.assertNotIn(self.post.text, str(response_content))
-        self.another_auth_client.post(reverse('posts:profile_follow',
-                                              args=[self.user]))
-        posts_after_follow = self.another_auth_client.get(
-            reverse('posts:follow_index')).content
+        self.another_auth_client.post(reverse('posts:profile_follow', args=[self.user]))
+        posts_after_follow = self.another_auth_client.get(reverse('posts:follow_index')).content
         self.assertIn(self.post.text, str(posts_after_follow))
 
-    def test_posts_not_present_for_unfollow_user(self):
-        """Посты авторов не появляются у пользователя
-        который не подписан на него."""
-        self.another_auth_client.post(
-            reverse('posts:profile_follow',
-                    args=[self.user]))
-        response = self.authorized_client.get(
-            reverse('posts:follow_index')).content
+    def test_posts_not_present_for_unfollow_user(self) -> None:
+        """Test whether posts from authors not followed by the user do not appear on the follow page"""
+        self.another_auth_client.post(reverse('posts:profile_follow', args=[self.user]))
+        response = self.authorized_client.get(reverse('posts:follow_index')).content
         self.assertNotIn(self.post.text, str(response))
 
-    def test_auth_user_can_following(self):
-        """Авторизованный пользователь может
-        подписываться на других пользователей"""
-        response_auth = self.another_auth_client.post(
-            reverse('posts:profile_follow',
-                    args=[self.user]))
-        self.assertEqual(response_auth.status_code,
-                         HTTPStatus.FOUND)
-        self.assertRedirects(
-            response_auth,
-            reverse('posts:profile',
-                    args=[self.user.username]))
+    def test_auth_user_can_following(self) -> None:
+        """Test whether an authenticated user can follow other users"""
+        response_auth = self.another_auth_client.post(reverse('posts:profile_follow', args=[self.user]))
+        self.assertEqual(response_auth.status_code, HTTPStatus.FOUND)
+        self.assertRedirects(response_auth, reverse('posts:profile', args=[self.user.username]))
         following = Follow.objects.filter(user=self.another_user)
         self.assertTrue(following.exists())
 
-    def test_auth_user_can_unfollow(self):
-        """Авторизованный пользователь может
-        удалить из подписок на других пользователей"""
-        self.another_auth_client.post(reverse('posts:profile_follow',
-                                              args=[self.user]))
-        self.another_auth_client.post(reverse('posts:profile_unfollow',
-                                              args=[self.user]))
+    def test_auth_user_can_unfollow(self) -> None:
+        """Test whether an authenticated user can unfollow other users"""
+        self.another_auth_client.post(reverse('posts:profile_follow', args=[self.user]))
+        self.another_auth_client.post(reverse('posts:profile_unfollow', args=[self.user]))
         follow = Follow.objects.filter(user=self.another_user)
         self.assertNotIn(self.another_user, follow)

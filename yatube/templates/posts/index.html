@@ -3,19 +3,19 @@
 
 <div class="col-md-8 p-5">
   <div class="container">
-    <h1 class="last_update_text" style>Последние обновления на сайте</h1>
+    <h1 class="last_update_text" style>Last updates</h1>
     {% include 'posts/includes/switcher.html' %}
     {% for post in page_obj %}
     {% include 'posts/includes/post_list.html' %}
     {% if post.group %}
-    <a type="button" id="btn_main_page" class="btn btn-outline-primary" href="{% url 'posts:group_list' post.group.slug %}">Все записи группы</a>
-    <a type="button" id="btn_main_page" class="btn btn-outline-primary" href="{% url 'posts:post_detail' post.id %}">Подробная информация</a>
+    <a type="button" id="btn_main_page" class="btn btn-outline-primary" href="{% url 'posts:group_list' post.group.slug %}">All Articles of Group</a>
+    <a type="button" id="btn_main_page" class="btn btn-outline-primary" href="{% url 'posts:post_detail' post.id %}">More...</a>
     <br/>
     {% endif %}
     {% if post.author == request.user %}
         <li class="post_opportunities">
-    <a type="button" id="btn_main_page"  class="btn btn-outline-success" href="{% url 'posts:update_post' post.id %}">Изменить пост</a>
-    <a type="button" id="btn_main_page"  class="btn btn-outline-danger" href="{% url 'posts:post_delete' post.id %}">Удалить пост</a>
+    <a type="button" id="btn_main_page"  class="btn btn-outline-success" href="{% url 'posts:update_post' post.id %}">Edit Post</a>
+    <a type="button" id="btn_main_page"  class="btn btn-outline-danger" href="{% url 'posts:post_delete' post.id %}">Delete Post</a>
         </li>
         <style>
   .post_opportunities {

@@ -8,20 +8,20 @@
             <aside class="col-12 col-md-3">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
-                        Дата публикации: {{ post.pub_date|date:"d E Y" }}
+                        Publication Date: {{ post.pub_date|date:"d E Y" }}
                     </li>
                     {% if post.group %}
                         <li class="list-group-item">
-                        Группа:<a type="button" id="btn_main_page" class="btn btn-outline-primary"
+                        Group:<a type="button" id="btn_main_page" class="btn btn-outline-primary"
                                   href="{% url 'posts:group_list' post.group.slug %}">{{ post.group }}</a>
                     {% endif %}
                     </li>
                     <li class="list-group-item">
-                        Автор: <a class="btn btn-outline-primary"
+                        Author: <a class="btn btn-outline-primary"
                                   href="{% url 'posts:profile' post.author %}">{{ post.author.get_full_name }}</a>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Всего постов автора: {{ count_posts }}
+                        Total of author posts: {{ count_posts }}
                     </li>
                     <li class="list-group-item">
                         </a>
@@ -36,7 +36,7 @@
 
     {% if user.is_authenticated %}
         <div class="card my-4 text-center" style="width:80%; right: auto; left:10%">
-            <h5 class="card-header">Добавить комментарий:</h5>
+            <h5 class="card-header">Add comment:</h5>
             <div class="card-body">
                 {% csrf_token %}
                 <div class="form-floating">

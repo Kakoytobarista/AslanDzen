@@ -3,7 +3,7 @@
   <div class="col-md-8 p-5">
     <div class="card">
       <div class="card-header">
-        {% if is_edit %} Редактировать запись {% else %} Новый пост {% endif %}
+        {% if is_edit %} Edit post {% else %} New Post {% endif %}
       </div>
       <div class="card-body">
         {% load user_filters %} {% if form.errors %} {% for field in form %}
@@ -35,7 +35,7 @@
           {% endfor %}
           <div class="text-center">
             <button id="submit-button" type="submit" class="btn btn-primary">
-              {% if is_edit %} Сохранить {% else %} Добавить {% endif %}
+              {% if is_edit %} Save {% else %} Add {% endif %}
             </button>
           </div>
         </form>

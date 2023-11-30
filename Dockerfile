@@ -1,7 +1,6 @@
 FROM python:3.8.5
 WORKDIR /code
 COPY yatube/requirements.txt .
-COPY /cert .
 RUN pip install --upgrade pip
 RUN pip3 install -r requirements.txt
 RUN pip3 install --upgrade attrs
@@ -15,5 +14,5 @@ python3 manage.py shell \
 && \
 python3 manage.py collectstatic --noinput \
 && \
-gunicorn yatube.wsgi:application --bind 0.0.0.0:8000 --timeout 600 --reload & daphne -e ssl:8001:privateKey=privkey.pem:certKey=cert.pem yatube.asgi:application " \
+daphne -b 0.0.0.0 -p 8001 yatube.asgi:application & gunicorn yatube.wsgi:application --bind 0.0.0.0:8000 --reload" \
 ]
