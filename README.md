@@ -31,7 +31,8 @@ Make sure you have the following installed on your system:
 2. **Run the `create_env_file.sh` script to generate the `.env` file:**
 
     ```bash
-    bash create_env_file.sh
+    chmod +x create_env_file.sh
+    ./create_env_file.sh
     ```
 
     This script will prompt you to enter the necessary environment variables. For simplicity, you can use the default values or customize them as needed.
