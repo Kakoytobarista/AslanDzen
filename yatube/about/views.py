@@ -1,5 +1,3 @@
-from django.views.decorators.cache import cache_page
-from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
 from django.http import HttpRequest, HttpResponse
 from typing import Any
@@ -17,7 +15,6 @@ class AboutAuthorView(TemplateView):
     template_name: str = 'about/author.html'
     title: str = 'About Author'
 
-    @method_decorator(cache_page(10 * 5))
     def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
         """Cached dispatch method for the view."""
         return super().dispatch(request, *args, **kwargs)
@@ -35,7 +32,6 @@ class AboutTechView(TemplateView):
     template_name: str = 'about/tech.html'
     title: str = 'Tech'
 
-    @method_decorator(cache_page(10 * 5))
     def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
         """Cached dispatch method for the view."""
         return super().dispatch(request, *args, **kwargs)
