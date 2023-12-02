@@ -47,7 +47,7 @@ Make sure you have the following installed on your system:
 
 4. **Access the application in your browser:**
 
-    Open your web browser and go to [http://localhost:8000](http://localhost:8000) to view the AslanDzen web application.
+    Open your web browser and go to [http://localhost:80](http://localhost:80) to view the AslanDzen web application.
 
 ## Admin Account
 
